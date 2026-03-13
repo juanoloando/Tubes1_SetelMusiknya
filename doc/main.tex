@@ -1,0 +1,29 @@
+\RequirePackage{etex}
+
+\documentclass[13pt,a4paper]{article}
+
+\usepackage{graphicx}
+\input{preamble.sty}
+
+
+\begin{document}
+\begin{titlepage}
+  \maketitle
+  \thispagestyle{empty}
+\end{titlepage}
+
+\tableofcontents
+\pagebreak
+
+\newpage
+
+\input{chapters/bab1}
+\input{chapters/bab2}
+\input{chapters/bab3}
+\input{chapters/bab4}
+\input{chapters/bab5}
+
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
+
+\end{document}

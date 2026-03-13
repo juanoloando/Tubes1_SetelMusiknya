@@ -1,0 +1,255 @@
+% HAPUS \documentclass DARI SINI KARENA SUDAH ADA DI MAIN.TEX
+
+% page
+\usepackage[a4paper, top=0in, bottom=0.2in, left=1in, right=1in, headheight=57pt, includeheadfoot]{geometry}
+\usepackage{enumitem}
+
+\usepackage{totpages}
+\setcounter{tocdepth}{3}
+
+%layouting
+\usepackage{array, multirow}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage[bottom]{footmisc}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+
+% math
+\usepackage{amsmath, amssymb, amsthm, physics}
+
+% table
+\usepackage{tabularx}
+
+% graphics
+\usepackage[inkscapelatex=false]{svg}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usepackage{tkz-euclide}
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,positioning,fit,petri,angles,calc,decorations.pathreplacing}
+\usepackage{tikz-network}
+\usepackage{graphicx}
+
+% warna
+\usepackage[dvipsnames]{xcolor}
+\definecolor{merah}{HTML}{F4564E}
+\definecolor{merahtua}{HTML}{89313E}
+\definecolor{biru}{HTML}{60BBE5}
+\definecolor{birutua}{HTML}{412F66}
+\definecolor{hijau}{HTML}{59CC78}
+\definecolor{hijautua}{HTML}{366D5B}
+\definecolor{kuning}{HTML}{FFD56B}
+\definecolor{jingga}{HTML}{FBA15F}
+\definecolor{ungu}{HTML}{8C5FBF}
+\definecolor{lavender}{HTML}{CBA5E8}
+\definecolor{merjamb}{HTML}{FFB6E0}
+\definecolor{carminered}{rgb}{1.0, 0.0, 0.22}
+\definecolor{capri}{rgb}{0.0, 0.75, 1.0}
+\definecolor{brightlavender}{rgb}{0.75, 0.58, 0.89}
+% \pagecolor{black!85!lavender}
+% \color{white}
+
+% listings
+\usepackage{listings}
+\lstdefinestyle{code}{
+    commentstyle=\color{lavender},
+    keywordstyle=\color{merah},
+    numberstyle=\tiny\color{brightlavender!40!gray},
+    stringstyle=\color{kuning},
+    basicstyle=\ttfamily\footnotesize, 
+    breaklines=true,
+    numbers=left,                    
+    numbersep=5pt,
+}
+\lstset{style=code}
+
+% bahasa
+\renewcommand{\contentsname}{Daftar Isi}
+\renewcommand{\figurename}{Gambar}
+\captionsetup[table]{name=Tabel}
+\renewcommand{\refname}{Referensi}
+\renewcommand\today{$\number\day$\ %
+	\ifcase\month \or Januari\or Februari\or Maret\or April\or Mei%
+	\or Juni\or Juli\or Agustus\or September\or Oktober\or November\or Desember\fi\ $\number\year$}%
+
+% bibliografi
+\usepackage{cite}
+\makeatletter
+\def\thebibliography#1{%
+    \section*{\refname}%
+    \addcontentsline{toc}{section}{\refname}%
+    \footnotesize\vskip 0.3\baselineskip plus 0.1\baselineskip minus 0.1\baselineskip%
+    \list{\@biblabel{\@arabic\c@enumiv}}{%
+        \settowidth\labelwidth{\@biblabel{#1}}%
+        \leftmargin\labelwidth
+        \advance\leftmargin\labelsep\relax
+        \itemsep 5pt\relax
+        \usecounter{enumiv}%
+        \let\p@enumiv\@empty
+        \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+    \sloppy\clubpenalty4000\widowpenalty4000%
+}
+\def\endthebibliography{\endlist}
+\makeatother
+\usepackage[hyphens]{url}
+
+% tcolorbox
+\usepackage{tcolorbox}
+%chip
+\tcbset{
+  chip-docs-dark/.style={
+    enhanced,
+    boxrule=0pt, frame hidden,
+    borderline={0.45pt}{0pt}{white!25},  
+    colback=white!7,                      
+    coltext=black!40!ungu,                  
+    arc=6pt,                                
+    top=1pt, bottom=1pt, left=5pt, right=5pt,
+    boxsep=0pt,                            
+    on line, valign=center, tcbox raise base,
+    before upper={\vphantom{dg}},
+    nobeforeafter
+  },
+  chip-docs-light/.style={
+    enhanced,
+    boxrule=0pt, frame hidden,
+    borderline={0.45pt}{0pt}{black!15},
+    colback=black!7!white,                        
+    coltext=black!75!ungu,
+    arc=6pt,
+    top=1pt, bottom=1pt, left=5pt, right=5pt,
+    boxsep=0pt,
+    on line, valign=center, tcbox raise base,
+    before upper={\vphantom{dg}},
+    nobeforeafter
+  }
+}
+\tcbuselibrary{skins, breakable, theorems, listings}
+
+\newcounter{hitung}
+
+% Jawab environment
+\makeatletter
+\tcbset{jawabbox/.style={check odd page, toggle left and right, 
+    skin=enhancedmiddle, breakable, parbox=false, boxrule=0mm,
+    colframe=black!85!lavender!60!white,
+    leftrule=8pt, rightrule=0mm, boxsep=0mm,
+    arc=0mm, outer arc=0mm, left=3mm, right=3mm, top=3mm, bottom=3mm,
+    colback=black!85!lavender!95!white, coltext=white,
+    before skip=8pt, after skip=8pt,
+    before={\par\vskip-2pt}, after={\par\smallbreak}}}
+\newtcolorbox{JawabBox}{jawabbox}
+\makeatother
+
+\newenvironment{jawab}[1][Jawab.]{\JawabBox\strut\textsc{#1}\space}{\endJawabBox}
+
+% Proof environment
+\makeatletter
+\def\tcb@theo@widetitle#1#2#3{\hbox to \textwidth{\textsc{\large#1}\normalsize\space#3\hfil(#2)}}
+\tcbset{
+    theorem style/theorem wide name and number/.code={\let\tcb@theo@title=\tcb@theo@widetitle},
+    proofbox/.style={skin=enhancedmiddle, breakable, parbox=false, boxrule=0mm,
+        check odd page, toggle left and right,
+        colframe=black!85!lavender!60!white,
+        leftrule=8pt, rightrule=0mm, boxsep=0mm,
+        arc=0mm, outer arc=0mm, left=3mm, right=3mm,
+        colback=black!85!lavender!95!white, coltext=white,
+        before skip=8pt, after skip=8pt,
+        before={\par\vskip-2pt}, after={\par\smallbreak}}}
+\newtcolorbox{ProofBox}{proofbox}
+\makeatother
+
+\let\realproof\proof
+\let\realendproof\endproof
+\renewenvironment{proof}[1][Bukti.]{\ProofBox\strut\textsc{#1}\space}{\endProofBox}
+\AtEndEnvironment{proof}{\null\hfill$\blacksquare$}
+
+% Theorem environments
+\newtcbtheorem[use counter=hitung, number within=section]{thm}{Teorema}
+  {theorem style=theorem wide name and number, breakable, enhanced,
+   boxrule=0pt, top=0.2cm, colframe=black!85!lavender!50!merah,
+   colback=black!85!lavender!80!merah, coltitle=white, coltext=white!80!merah,
+   fonttitle=\bfseries,fontupper=\normalsize}{thm}
+
+\newtcbtheorem[use counter=hitung, number within=section]{cmt}{Komentar}
+  {theorem style=theorem wide name and number, breakable, enhanced,
+   boxrule=0pt, top=0.2cm, colframe=black!85!lavender!50!hijau,
+   colback=black!85!lavender!80!hijau, coltitle=white, coltext=white!80!hijau,
+   fonttitle=\bfseries,fontupper=\normalsize}{cmt}
+
+% judul
+\usepackage{titling} 
+\pretitle{\centering\LARGE\scshape}
+\posttitle{\vspace{0.5em}\par\vspace{1cm}\includegraphics[width=0.6\textwidth]{images/efrenreinsen.jpeg}\par\vspace{1.5cm}}
+\preauthor{\centering\large\scshape}
+\postauthor{\par}
+\predate{\centering}
+\postdate{\par}
+\title{%
+  \vspace{-2cm}
+  \textbf{\LARGE Laporan Tugas Besar 1} \\[0.25em]
+  \Large IF2211 Strategi Algoritma \\[0.25em]
+  \large Battle Code 2 \\[0.25em]
+  \normalsize Semester II Tahun 2025/2026 \\[2em]
+}
+
+\author{%
+  Laboratorium Ilmu dan Rekayasa Komputasi \\[.25em]
+  Program Studi Teknik Informatika \\[.25em]
+  Sekolah Teknik Elektro dan Informatika \\[.25em] 
+  Institut Teknologi Bandung\\[.25em]
+}
+\date{}
+
+% catatan kaki
+\makeatletter
+\renewcommand\@makefntext[1]{\parindent 1em\noindent\color{black!80}\hb@xt@1.8em{\hss\@makefnmark}#1}
+\makeatother
+
+% header & footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{57pt}
+\setlength{\headsep}{1.5em} 
+\fancyhead[L]{%
+  \includegraphics[width=0.05\textwidth]{images/itb.png}%
+  \hspace{1em}%
+  \includegraphics[width=0.05\textwidth]{images/stei.png}%
+  \hspace{1em}%
+}
+
+\fancyhead[R]{%
+  \parbox[b]{0.45\textwidth}{%
+    \footnotesize
+    \raggedleft
+    \textbf{IF2211 Strategi Algoritma}\\
+    Laporan Tugas Besar 1 \\
+    \textit{Semester II 2025/2026}
+  }%
+}
+
+\renewcommand{\footrulewidth}{0.4pt} 
+\fancyfoot[L]{\color{black}SetelMusiknya - 6 sks MIT = 2 Minggu ITB}
+\fancyfoot[R]{\color{black}Halaman \thepage\ dari \hspace{-2pt} {\pageref*{TotPages}}}
+
+\fancypagestyle{firstpage}{\fancyhf{}}
+
+% hyperref
+\usepackage[unicode]{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor={black},
+    citecolor={lavender!40!black},
+    urlcolor={biru!40!ungu},
+    bookmarksnumbered=true
+}
+\usepackage{minitoc}
+\newcommand{\richlink}[2]{%
+  \href{#1}{\tcbox[chip-docs-light]{#2}}%
+}
+
+\newcommand{\richref}[2]{%
+  \hyperref[#1]{\tcbox[chip-docs-light]{#2}}%
+}

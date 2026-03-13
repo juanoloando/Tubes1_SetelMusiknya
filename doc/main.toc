@@ -1,0 +1,14 @@
+\contentsline {section}{\numberline {1}Deskripsi Tugas}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Latar Belakang}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Komponen Permainan}{2}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Objective Permainan}{2}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}Aturan Tiebreaker}{2}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.3}Peta Permainan}{2}{subsubsection.1.2.3}%
+\contentsline {subsubsection}{\numberline {1.2.4}Jarak Pandang dan Pergerakan}{2}{subsubsection.1.2.4}%
+\contentsline {subsubsection}{\numberline {1.2.5}Tower dan Ruins}{3}{subsubsection.1.2.5}%
+\contentsline {subsubsection}{\numberline {1.2.6}Sumber Daya}{3}{subsubsection.1.2.6}%
+\contentsline {subsubsection}{\numberline {1.2.7}Robot}{3}{subsubsection.1.2.7}%
+\contentsline {subsubsection}{\numberline {1.2.8}Jenis Robot}{3}{subsubsection.1.2.8}%
+\contentsline {subsubsection}{\numberline {1.2.9}Komunikasi}{4}{subsubsection.1.2.9}%
+\contentsline {subsubsection}{\numberline {1.2.10}Batasan Program}{4}{subsubsection.1.2.10}%
+\contentsline {subsubsection}{\numberline {1.2.11}Tujuan Tugas Besar}{4}{subsubsection.1.2.11}%

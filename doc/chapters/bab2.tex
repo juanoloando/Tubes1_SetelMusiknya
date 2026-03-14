@@ -1,0 +1,32 @@
+\section{Landasan Teori}
+\subsection{Algoritma Greedy}
+\subsubsection{Konsep Dasar}
+Algoritma \textit{greedy} merupakan salah satu alritma yang bisa digunakan untuk menyelesaikan tipe permasalahan optimasi. Algoritma ini menyarankan pembentukan sebuah solusi secara bertahap, di mana setiap langkah memiliki banyak pilihan yang bisa dievaluasi hingga akhirnya solusi lengkap untuk masalah tersebut bisa tercapai.
+Penentuan solusi yang bisa dievaluasi pada setiap tahap harus memenuhi kriteria-kriteria berikut: 
+\begin{itemize}
+    \item Pilihan tidak boleh melanggar \textit{constraints} dari permasalah yang sedang diselesaikan
+    \item Pilihan yang diambil pada tiap langkahnya haruslah merupakan pilihan yang optimal secara lokal (pilihan terbaik yang tersedia pada tahap tersebut)
+    \item Pilihan yang sudah dibuat bersifat final dan tidak dapat diubah maupun ditarik kembali pada langkah-langkah berikutnya dalam algoritma.
+\end{itemize}
+
+Tiga karakteristik barusan menjelaskan mengapa algoritma ini disebut sebagai algoritma \textit{greedy}. Setiap langkah yang diambil harus memenuhi prinsip "\textit{take what you can get now!}" tanpa perlu memikirkan akibat yang dihasilkan di langkah-langkah berikutnya. Setiap langkah optimum lokal yang diambil diharapkan bisa menghasilkan solusi keseluruhan yang optimum secara global. 
+
+Algoritma ini secara spesifik hanya bisa diaplikasikan untuk tipe permasalahan optimasi. Tipe persoalan optimasi adalah persoalan yang memiliki tujuan untuk mencari solusi optimal dari berbagai kemungkinan solusi yang ada. Secara umum, permalasahan optimasi dibagi menjadi dua jenis, maksimasi (\textit{maximization}), yaitu persoalan optimasi yang bertujuan untuk mendapatkan hasil maksimal dari fungsi tujuan, dan minimasi (\textit{minimization}), yaitu persoalan optimasi yang bertujuan untuk mendapatkan hasil minimal dari fungsi tujuan. 
+
+Walaupun setiap langkah yang diambil merupakan optimum lokal dari semua pilihan yang tersedia, perlu diingat bahwa solusi yang dihasilkan belum tentu merupakan sebuah optimum global. Pendekatan menggunakan algoritma ini bisa dijadikan sebagai solusi hampiran, yang pada beberapa jenis persoalan tertentu sudah dianggap cukup dan dapat diterima, mengingat efisiensi waktu yang jauh lebih cepat dibanding dengan algoritma \textit{exhaustive search}.
+
+\subsubsection{Elemen-Elemen}
+Dalam memecahkan tipe permasalahan optimasi, algoritma \textit{greedy} melibatkan pencarian sebuah himpunan bagian dari sekumpulan kandidat yang ada. Himpunan bagian tersebut harus memenuhi beberapa kriteria tertentu agar bisa merepresentasikan suatu solusi yang dioptimalkan oleh sebuah fungsi tujuan. 
+Untuk mencapai hal terrsebut, algoritma \textit{greedy} biasanya dibangun oleh beberapa elemen pendukung: 
+\begin{enumerate}
+    \item \textbf{Himpunan Kandidat (\textit{Candidate set})} \\
+        Ini adalah sekumpulan elemen ytang berisi seluruh kandidat pilihan yang bisa dipilih pada setiap langkah pencarian. Sebagai contoh, dalam kasus komputasi, kandidat dapat beruapa simpul ataupun sisi di dalam graf, pecahan mata uang, kumpulan benda berbobot tertentu, dan hal-hal lain yang relevan dengan permasalahan yang sedang dioptimasi.
+    \item \textbf{Himpunan Solusi (\textit{Solution set})} \\
+        Himpunan solusi adalah sebuah himpunan yang berisi solusi-solusi yang dipilih pada setiap langkah yang sudah diambil. Himpunan ini dibangun secara bertahap dengan kondisi awal kosong dan akan terus ditambahkan elemen baru berupa solusi yang dipilih pada setiap iterasi pemilihan langkah hingga akhir solusi akhir tercapai.
+    \item \textbf{Fungsi Seleksi (\textit{Selection function})} \\
+        Fungsi ini bertugas untuk memiliki kandidat terbaik dari himpunan kandidat pada suatu langkah. Fungsi ini didasarkan pada strategi \textit{greedy} (heuristik) tertentu yang memberikan kondisi lokal optimum pada langkah tersebut.
+    \item \textbf{Fungsi Kelayakan (\textit{Feasible function})} \\
+        Fungsi ini bertugas untuk menguji output fungsi seleksi untuk menentukan layak atau tidaknya hasil tersebut dimasukkan ke himpunan solusi. Pengcekan ini penting untuk memastikan bahwa output dari fungsi seleksi tidak melanggar \textit{constraint} yang ditetapkan oleh permasalah.
+    \item \textbf{Fungsi Objektif (\textit{Objective function})} \\
+        Fungsi ini bertugas untuk mengukur ketercapaian keseluruhan ataupun nilai dari sebuah solusi yang dihasilkan. Inilah fungsi utama yang bertugas untuk mencapai target akhir persoalan, yaitu memaksimalisasi atau meminimalisasi nilai dari solusi yang didapatkan.
+\end{enumerate}

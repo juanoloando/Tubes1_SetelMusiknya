@@ -1,6 +1,6 @@
 \RequirePackage{etex}
 
-\documentclass[13pt,a4paper]{article}
+\documentclass[a4paper]{article}
 
 \usepackage{graphicx}
 \usepackage{enumitem}
@@ -32,7 +32,11 @@
 \newpage
 \input{chapters/bab5}
 
+% Example citation to ensure BibTeX processes bibliography
+\cite{exampleReference}
+
+\nocite{*}
 \bibliographystyle{IEEEtran}
-\bibliography{bibliography}
+\bibliography{biblio}
 
 \end{document}

@@ -18,7 +18,7 @@ Di dalam repositori ini, terdapat **tiga alternatif bot** yang masing-masing men
 * **Heuristik:** Menggunakan navigasi aman, komunikasi *broadcasting* canggih antar unit, mekanisme *Anti-Clumping* (penghindar dempet), dan secara berkala kembali ke menara untuk melakukan *refill* cat.
 
 
-3. **`altbot2` / `juans` (Symmetry Exploitation & Early Rush)**
+3. **`altbot2` (Symmetry Exploitation & Early Rush)**
 * Menerapkan strategi efisiensi informasi berdasarkan geometri peta.
 * **Heuristik:** Mengasumsikan dan menebak simetri peta sejak awal permainan (Rotasi, Refleksi X, atau Refleksi Y). Mengirim gelombang *Soldier* secara masif di ronde-ronde awal untuk merebut *ruins* (reruntuhan) dan langsung menyerbu tebakan lokasi markas musuh.
 
@@ -112,7 +112,7 @@ battlecode2025/
 │   │   └── ... (Soldier, Splasher, Mopper, Tower Unit)
 │   ├── altbot1/               # Kode sumber untuk Alternatif 1 (Macro-Control)
 │   │   └── ...
-│   └── juans/                 # Kode sumber untuk Alternatif 2 (Symmetry Exploitation)
+│   └── altbot2                 # Kode sumber untuk Alternatif 2 (Symmetry Exploitation)
 │       └── ...
 ├── matches/                   # Folder hasil keluaran pertandingan (.bc25)
 ├── build.gradle               # Konfigurasi Gradle Battlecode

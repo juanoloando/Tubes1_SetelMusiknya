@@ -4,6 +4,193 @@
 
 \subsubsection{mainbot}
 
+\begin{pseudocode}{BaseRobot.java}
+    function moveTo(target: Location) -> boolean
+    { Menentukan langkah pergerakan terbaik menuju target dengan penalti trail }
+
+    { Deklarasi }
+    C : himpunan_kandidat_arah
+    dir, bestDir : Direction
+    score, bestScore, trailPenalty : integer
+    nextLoc : Location
+
+    { Algoritma }
+    if not isMovementReady() then return false end if
+    
+    bestScore <- 999999 { Mencari nilai minimum (jarak terpendek) }
+    bestDir <- null
+    C <- {NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST}
+
+    while C != {} do
+        dir <- SELEKSI(C)
+        C <- C - {dir}
+        
+        if canMove(dir) then
+            nextLoc <- getCurrentLocation() + dir
+            
+            { Fungsi Seleksi: Jarak Euclidean + Penalti Riwayat (Trail) }
+            trailPenalty <- getTrailPenalty(nextLoc)
+            score <- distanceSquared(nextLoc, target) + trailPenalty
+            
+            { Keputusan Greedy: Pilih skor terendah }
+            if score < bestScore then
+                bestScore <- score
+                bestDir <- dir
+            end if
+        end if
+    end while
+
+    if bestDir != null then
+        move(bestDir)
+        recordTrail(getCurrentLocation())
+        return true
+    end if
+    return false
+\end{pseudocode}
+
+\begin{pseudocode}{TowerUnit.java}
+    function decideSpawnType(totalUnits: integer) -> UnitType
+    { Memilih unit yang akan diproduksi berdasarkan rasio populasi saat ini }
+
+    { Deklarasi }
+    rSoldier, rSplasher, rMopper : float
+
+    { Algoritma }
+    if totalUnits = 0 then return SOLDIER end if
+
+    { Hitung Rasio Distribusi Pasukan }
+    rSoldier <- getSoldierCount() / totalUnits
+    rSplasher <- getSplasherCount() / totalUnits
+    rMopper <- getMopperCount() / totalUnits
+
+    { Fungsi Seleksi Greedy: Prioritaskan rasio terendah yang belum terpenuhi }
+    if rMopper < 0.15 then
+        return MOPPER
+    else if rSoldier < 0.40 then
+        return SOLDIER
+    else if rSplasher < 0.45 then
+        return SPLASHER
+    else
+        return SOLDIER { Default fallback }
+    end if
+\end{pseudocode}
+
+\begin{pseudocode}{SplasherUnit.java}
+    function findDensityTarget() -> Location
+    { Menentukan target koordinat pergerakan menuju kuadran dengan densitas cat tertinggi }
+
+    { Deklarasi }
+    C : himpunan_kandidat_tile
+    quadScore : array[0..3] of integer
+    quadCount : array[0..3] of integer
+    bestQ : integer
+    maxDensity, currentDensity : float
+
+    { Algoritma }
+    C <- getAllVisibleTiles()
+    
+    while C != {} do
+        tile <- SELEKSI(C)
+        C <- C - {tile}
+        q <- getQuadrantIndex(tile.location)
+        
+        quadCount[q] <- quadCount[q] + 1
+        if not isAlly(tile.paint) then
+            { Bobot Greedy: Musuh = 3, Kosong = 1 }
+            quadScore[q] <- quadScore[q] + (isEnemy(tile.paint) ? 3 : 1)
+        end if
+    end while
+
+    { Cari Kuadran dengan Densitas Keuntungan Maksimal }
+    maxDensity <- -1.0
+    for i <- 0 to 3 do
+        currentDensity <- quadScore[i] / quadCount[i]
+        if currentDensity > maxDensity then
+            maxDensity <- currentDensity
+            bestQ <- i
+        end if
+    end for
+
+    return getCoordinateFromQuadrant(bestQ)
+\end{pseudocode}
+
+\begin{pseudocode}{MopperUnit.java}
+    procedure doMobCombat()
+    { Memilih arah ayunan mop swing secara greedy untuk mengenai musuh sebanyak mungkin }
+
+    { Deklarasi }
+    C : himpunan_kandidat_arah
+    dir, bestDir : Direction
+    hits, bestHits : integer
+
+    { Algoritma }
+    if not isActionReady() then stop end if
+
+    bestHits <- 0
+    bestDir <- null
+    C <- {NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST}
+
+    while C != {} do
+        dir <- SELEKSI(C)
+        C <- C - {dir}
+
+        if canMopSwing(dir) then
+            { Fungsi Seleksi: Hitung jumlah robot musuh dalam jangkauan ayunan 3-tile }
+            hits <- countMopSwingHits(dir)
+
+            if hits > bestHits then
+                bestHits <- hits
+                bestDir <- dir
+            end if
+        end if
+    end while
+
+    { Eksekusi Aksi }
+    if bestDir != null then
+        mopSwing(bestDir)
+    end if
+\end{pseudocode}
+
+\begin{pseudocode}{SoldierUnit.java}
+    procedure doInitialPaint(homeTower: Location)
+    { Pembagian area kerja Greedy di sekitar menara awal secara simetris }
+
+    { Deklarasi }
+    C : himpunan_kandidat_tile
+    tile : MapInfo
+    tLoc : Location
+    isRoleA : boolean
+
+    { Algoritma }
+    isRoleA <- (getID() mod 2 = 0)
+    C <- getNearbyMapInfos(homeTower, 8)
+
+    while C != {} do
+        tile <- SELEKSI(C)
+        C <- C - {tile}
+        tLoc <- tile.location
+
+        { Fungsi Kelayakan Berdasarkan Peran }
+        if isRoleA then
+            if not (tLoc.x < homeTower.x or (tLoc.x = homeTower.x and tLoc.y < homeTower.y)) then 
+                continue 
+            end if
+        else
+            if (tLoc.x < homeTower.x or (tLoc.x = homeTower.x and tLoc.y < homeTower.y)) then 
+                continue 
+            end if
+        end if
+
+        { Aksi Greedy Pengecatan }
+        if not isAlly(tile.paint) and canAttack(tLoc) then
+            if isActionReady() then
+                attack(tLoc)
+                stop { Keluar dari prosedur setelah aksi berhasil }
+            end if
+        end if
+    end while
+\end{pseudocode}
+
 \subsubsection{altbot1}
 \begin{pseudocode}{Navigation.java}
     function moveGreedyMacro(targetDir: Direction, history: array of Location, isSplasher: boolean) -> boolean

@@ -1,5 +1,5 @@
 # Fdb version 4
-["bibtex main"] 0 "main.aux" "main.bbl" "main" 0 0
+["bibtex main"] 0 "main.aux" "main.bbl" "main" 1773542172.55088 0
   "/usr/share/texlive/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "bibliography.bib" 0 -1 0 ""
   "main.aux" 0 -1 0 "pdflatex"
@@ -7,7 +7,7 @@
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1773539359.34246 "/mnt/c/Users/HP/Documents/Tubes1_SetelMusiknya/doc/main.tex" "main.pdf" "main" 1773539365.37022 0
+["pdflatex"] 1773542163.12147 "/mnt/c/Users/HP/Documents/Tubes1_SetelMusiknya/doc/main.tex" "main.pdf" "main" 1773542172.55251 0
   "/etc/texmf/web2c/texmf.cnf" 1773508087.80453 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/mnt/c/Users/HP/Documents/Tubes1_SetelMusiknya/doc/main.tex" 1773534090.34433 440 047781f16fad70fa7960f467c7ee7cc3 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -545,20 +545,20 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1773539044.19838 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1773539258 8215391 ea0858fc9ff5b5b37c50c51e8ac5ce11 ""
   "chapters/bab1.tex" 1773534090.31594 6889 f24bc56256c5ccf49ad6e5ce6a05ff5c ""
-  "chapters/bab2.tex" 1773539352.80399 4607 d0684799875670c5def63ea17cccab13 ""
+  "chapters/bab2.tex" 1773542162.0155 7213 1ac636bd0c1d95062bcf8fdc735a7573 ""
   "chapters/bab3.tex" 1773534090.31858 0 d41d8cd98f00b204e9800998ecf8427e ""
   "chapters/bab4.tex" 1773534090.31957 0 d41d8cd98f00b204e9800998ecf8427e ""
   "chapters/bab5.tex" 1773534090.3204 0 d41d8cd98f00b204e9800998ecf8427e ""
   "images/efrenreinsen.jpeg" 1773534090.32328 99636 24dff3fec3ba2c275ad0bf28d4838d13 ""
   "images/itb.png" 1773534090.32493 20574 6baff10998212c96e72a8bb8dfce690a ""
   "images/stei.png" 1773534090.32657 66600 bb9db9f74bcbcfc8fa4173525f31383b ""
-  "main.aux" 1773539364.3789 3073 99aee3a0d8818f6065cb73a4c32328c6 "pdflatex"
+  "main.aux" 1773542170.19691 3713 5e79d30dfd1d502ec4c4c6de29692d72 "pdflatex"
   "main.bbl" 0 -1 0 "bibtex main"
-  "main.mtc" 1773539362.97491 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.mtc0" 1773539362.97591 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.out" 1773539364.3809 3055 8e29ba9e2da82ace670a43f7a7c5b1ca "pdflatex"
+  "main.mtc" 1773542167.67752 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.mtc0" 1773542167.67851 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.out" 1773542170.2039 4415 d5b91034ebe35a62d1d64a9fb1862923 "pdflatex"
   "main.tex" 1773534090.34433 440 047781f16fad70fa7960f467c7ee7cc3 ""
-  "main.toc" 1773539364.3829 1567 409d84189922e7b6d62684fea15cc462 "pdflatex"
+  "main.toc" 1773542170.23788 2043 c3505be6e18e6f73c99cef8467c01bc5 "pdflatex"
   "preamble.sty" 1773534090.34688 7861 f0530ec7ebc17b998cf3e573c53badc1 ""
   (generated)
   "main.aux"

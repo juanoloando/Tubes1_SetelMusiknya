@@ -16,3 +16,7 @@
 \contentsline {subsection}{\numberline {2.1}Algoritma Greedy}{4}{subsection.2.1}%
 \contentsline {subsubsection}{\numberline {2.1.1}Konsep Dasar}{4}{subsubsection.2.1.1}%
 \contentsline {subsubsection}{\numberline {2.1.2}Elemen-Elemen}{5}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}Mekanisme Kerja Program dan Implementasi Greedy pada Battlecode}{5}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Sistem Eksekusi Berbasis Giliran (Turn-Based Execution)}{5}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Penerapan Algoritma Greedy pada Bot}{6}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Eksekusi dan Siklus Hidup Bot}{6}{subsubsection.2.2.3}%

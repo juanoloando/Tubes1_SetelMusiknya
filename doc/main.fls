@@ -1099,6 +1099,14 @@ INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
+INPUT ./images/itb.png
+INPUT ./images/itb.png
+INPUT ./images/itb.png
+INPUT ./images/itb.png
+INPUT ./images/stei.png
+INPUT ./images/stei.png
+INPUT ./images/stei.png
+INPUT ./images/stei.png
 INPUT ./chapters/bab3.tex
 INPUT ./chapters/bab3.tex
 INPUT ./chapters/bab3.tex

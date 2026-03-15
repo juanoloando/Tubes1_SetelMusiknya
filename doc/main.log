@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.15)  15 MAR 2026 08:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.15)  15 MAR 2026 09:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1125,7 +1125,7 @@ Package minitoc(hints) Info: I0049
 LaTeX Font Warning: Font shape `OT1/cmr/bx/sc' undefined
 (Font)              using `OT1/cmr/bx/n' instead on input line 13.
 
-<images/efrenreinsen.jpeg, id=79, 904.37875pt x 1606.0pt>
+<images/efrenreinsen.jpeg, id=95, 904.37875pt x 1606.0pt>
 File: images/efrenreinsen.jpeg Graphic file (type jpg)
 <use images/efrenreinsen.jpeg>
 Package pdftex.def Info: images/efrenreinsen.jpeg  used on input line 13.
@@ -1144,12 +1144,12 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@toc=\write7
 \openout7 = `main.toc'.
 
-<images/itb.png, id=123, 1000.06055pt x 1000.06055pt>
+<images/itb.png, id=147, 1000.06055pt x 1000.06055pt>
 File: images/itb.png Graphic file (type png)
 <use images/itb.png>
 Package pdftex.def Info: images/itb.png  used on input line 18.
 (pdftex.def)             Requested size: 22.64977pt x 22.64536pt.
-<images/stei.png, id=124, 169.38281pt x 169.38281pt>
+<images/stei.png, id=148, 169.38281pt x 169.38281pt>
 File: images/stei.png Graphic file (type png)
 <use images/stei.png>
 Package pdftex.def Info: images/stei.png  used on input line 18.
@@ -1184,13 +1184,22 @@ Package pdftex.def Info: images/stei.png  used on input line 113.
 [3.4{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]) (./chapters/bab2.tex
 File: images/itb.png Graphic file (type png)
 <use images/itb.png>
-Package pdftex.def Info: images/itb.png  used on input line 15.
+Package pdftex.def Info: images/itb.png  used on input line 18.
 (pdftex.def)             Requested size: 22.64977pt x 22.64536pt.
 File: images/stei.png Graphic file (type png)
 <use images/stei.png>
-Package pdftex.def Info: images/stei.png  used on input line 15.
+Package pdftex.def Info: images/stei.png  used on input line 18.
 (pdftex.def)             Requested size: 22.64977pt x 22.64857pt.
- [4.5]) (./chapters/bab3.tex) (./chapters/bab4.tex) (./chapters/bab5.tex)
+ [4.5]
+File: images/itb.png Graphic file (type png)
+<use images/itb.png>
+Package pdftex.def Info: images/itb.png  used on input line 45.
+(pdftex.def)             Requested size: 22.64977pt x 22.64536pt.
+File: images/stei.png Graphic file (type png)
+<use images/stei.png>
+Package pdftex.def Info: images/stei.png  used on input line 45.
+(pdftex.def)             Requested size: 22.64977pt x 22.64857pt.
+ [5.6]) (./chapters/bab3.tex) (./chapters/bab4.tex) (./chapters/bab5.tex)
 No file main.bbl.
 
 Package caption Warning: Unused \captionsetup[table] on input line 69.
@@ -1219,7 +1228,7 @@ File: images/stei.png Graphic file (type png)
 <use images/stei.png>
 Package pdftex.def Info: images/stei.png  used on input line 30.
 (pdftex.def)             Requested size: 22.64977pt x 22.64857pt.
-[5.6] (./main.aux)
+[6.7] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -1229,21 +1238,21 @@ L3 programming layer <2020/03/25>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8E29BA9E2DA82ACE670A43F7A7C5B1CA;3055.
+(rerunfilecheck)             Checksum: D5B91034EBE35A62D1D64A9FB1862923;4415.
  ) 
 Here is how much of TeX's memory you used:
- 57275 strings out of 474222
- 1317370 string characters out of 5748733
- 2047400 words of memory out of 5000000
- 78616 multiletter control sequences out of 15000+600000
+ 57285 strings out of 474222
+ 1317544 string characters out of 5748733
+ 2049400 words of memory out of 5000000
+ 78621 multiletter control sequences out of 15000+600000
  565264 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  115i,15n,110p,1343b,567s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (6 pages, 390911 bytes).
+Output written on main.pdf (7 pages, 402208 bytes).
 PDF statistics:
- 235 PDF objects out of 1000 (max. 8388607)
- 194 compressed objects within 2 object streams
- 36 named destinations out of 1000 (max. 500000)
- 172 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 269 PDF objects out of 1000 (max. 8388607)
+ 226 compressed objects within 3 object streams
+ 41 named destinations out of 1000 (max. 500000)
+ 204 words of extra memory for PDF output out of 10000 (max. 10000000)
 

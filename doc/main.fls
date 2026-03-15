@@ -1045,6 +1045,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 OUTPUT main.toc
 INPUT ./images/itb.png
 INPUT ./images/itb.png
@@ -1075,7 +1077,6 @@ INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT ./images/itb.png
 INPUT ./images/itb.png
 INPUT ./images/itb.png
@@ -1098,7 +1099,6 @@ INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT ./images/stei.png
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
 INPUT ./images/itb.png
 INPUT ./images/itb.png
 INPUT ./images/itb.png
@@ -1112,6 +1112,8 @@ INPUT ./chapters/bab3.tex
 INPUT ./chapters/bab3.tex
 INPUT ./chapters/bab3.tex
 INPUT chapters/bab3.tex
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
 INPUT ./images/itb.png
 INPUT ./images/itb.png
 INPUT ./images/itb.png
@@ -1120,6 +1122,16 @@ INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT ./images/stei.png
+INPUT ./images/itb.png
+INPUT ./images/itb.png
+INPUT ./images/itb.png
+INPUT ./images/itb.png
+INPUT ./images/stei.png
+INPUT ./images/stei.png
+INPUT ./images/stei.png
+INPUT ./images/stei.png
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
 INPUT ./images/itb.png
 INPUT ./images/itb.png
 INPUT ./images/itb.png
@@ -1157,10 +1169,14 @@ INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb

@@ -20,11 +20,17 @@
 \contentsline {subsubsection}{\numberline {2.2.1}Sistem Eksekusi Berbasis Giliran (Turn-Based Execution)}{5}{subsubsection.2.2.1}%
 \contentsline {subsubsection}{\numberline {2.2.2}Penerapan Algoritma Greedy pada Bot}{6}{subsubsection.2.2.2}%
 \contentsline {subsubsection}{\numberline {2.2.3}Eksekusi dan Siklus Hidup Bot}{6}{subsubsection.2.2.3}%
-\contentsline {section}{\numberline {3}Aplikasi Strategi Greedy}{6}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Pemetaan Persoalan Battlecode ke Elemen Algoritma Greedy}{6}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Eksplorasi Alternatif Solusi Greedy}{6}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Alternatif 1: Greedy Spasial Dinamis Berbobot (Solusi Bot Utama)}{6}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Alternatif 2: [Juan]}{8}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}Alternatif 3: [Edo]}{8}{subsubsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.3}Analisis Efisiensi dan Efektivitas Alternatif Solusi}{8}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Strategi Greedy yang Dipilih beserta Pertimbangan}{8}{subsection.3.4}%
+\contentsline {section}{\numberline {3}Aplikasi Strategi \textit {Greedy}}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Pemetaan Persoalan Battlecode 2025 ke Elemen-Elemen Algoritma \textit {Greedy}}{6}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Himpunan Kandidat}{6}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Himpunan Solusi}{6}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Fungsi Seleksi}{6}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Fungsi Kelayakan}{6}{subsubsection.3.1.4}%
+\contentsline {subsubsection}{\numberline {3.1.5}Fungsi Solusi}{6}{subsubsection.3.1.5}%
+\contentsline {subsubsection}{\numberline {3.1.6}Fungsi Objektif}{7}{subsubsection.3.1.6}%
+\contentsline {subsection}{\numberline {3.2}Eksplorasi Tiga Alternatif Solusi \textit {Greedy}}{7}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Alternatif 1 --- \textit {Greedy} Ekspansi Teritorial Berbasis Nilai Tile Lokal}{7}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Alternatif 2 --- \textit {(Dikembangkan oleh anggota kelompok lain)}}{8}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Alternatif 3 --- \textit {(Dikembangkan oleh anggota kelompok lain)}}{9}{subsubsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.3}Analisis Efisiensi dan Efektivitas}{9}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Strategi \textit {Greedy} yang Dipilih}{9}{subsection.3.4}%

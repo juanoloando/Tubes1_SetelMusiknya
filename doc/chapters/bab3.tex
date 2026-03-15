@@ -66,9 +66,9 @@ robot berusaha memaksimalkan kontribusinya terhadap (\ref{eq:obj}) dengan
 selalu memilih aksi yang memberikan peningkatan terbesar terhadap cakupan
 wilayah tim pada ronde yang sedang berjalan.
 
-\subsection{Eksplorasi Alternatif Solusi \textit{Greedy}: Strategi \textit{Nexus Expansion}}
+\subsection{Eksplorasi Alternatif Solusi \textit{Greedy}}
 
-\subsubsection{Alternatif 1: Eksplorasi Agresif Tanpa Refill}
+\subsubsection{Alternatif 1: Eksplorasi Agresif Tanpa Refill (\texttt{mainbot})}
 
 \paragraph{Heuristik Umum: \textit{Greedy Exploration} dan \textit{Anti-Trailing}}
 Secara umum, seluruh unit menggunakan fungsi seleksi pergerakan yang meminimalkan fungsi biaya total $J$ untuk setiap arah $d \in D$:
@@ -111,6 +111,56 @@ Menara (\textit{TowerUnit}) mengimplementasikan fungsi seleksi produksi untuk me
     \item Jika $R_{\text{splasher}} < 45\%$, pilih \textit{Splasher}.
 \end{itemize}
 Selain itu, menara melakukan \textit{broadcasting} lokasi secara berkala untuk memfasilitasi koordinasi simetris antar unit, memastikan robot tahu arah mana yang harus dijauhi saat cat mereka habis.
+
+\subsubsection{Alternatif 2: Pendekatan \textit{Macro-Efficiency} dan \textit{Proactive Map Control} (\texttt{altbot1})}
+
+Alternatif kedua ini berfokus pada \textit{map control} secara masif dengan memanfaatkan pergerakan yang aman dan stabil. Pengambilan keputusan \textit{greedy} pada alternatif ini tidak hanya berfokus pada penyerangan musuh, tetapi sangat mementingkan efisiensi cat dan pencegahan kerugian. Untuk mendukung keputusan \textit{greedy} tersebut, bot ini menggunakan perhitungan matematis dan operasi \textit{bitwise} yang kuat. Terdapat tiga heuristik utama yang membedakan alternatif ini:
+
+\paragraph{Heuristik Navigasi Aman dan \textit{Proactive Painting}}
+
+Pada setiap giliran, robot harus memilih satu dari 8 arah mata angin. Fungsi seleksi mengevaluasi setiap petak kandidat menggunakan fungsi objektif \textit{weighted navigation scoring}. Rumus fungsi objektif untuk mengevaluasi arah $d$ adalah sebagai berikut:
+
+\begin{equation}
+    Score(d) = W_{arah} + W_{cat} + W_{pusat} - P_{sejarah} - P_{menara}
+\end{equation}
+
+Distribusi bobot \textit{Greedy} pada rumus di atas ditentukan sebagai berikut:
+\begin{itemize}
+    \item $W_{arah} \in \{20, 10, 2\}$: Bobot keselarasan dengan arah makro (\textit{macro direction}). Arah makro ini didapatkan dari prediksi markas musuh menggunakan rumus simetri rotasi pusat:
+    \begin{align}
+        X_{musuh} &= W - 1 - X_{kita} \\
+        Y_{musuh} &= H - 1 - Y_{kita}
+    \end{align}
+    \textit{(di mana $W$ adalah lebar peta dan $H$ adalah tinggi peta)}
+    \item $W_{cat} \in \{8, 10, -15\}$: Pemilihan petak berbasis cat. Berjalan di cat sekutu diberikan bonus kecepatan (+8), tanah kosong didorong untuk ekspansi (+10), dan cat musuh diberi penalti absolut (-15) untuk menghindari terkurasnya persediaan cat.
+    \item $W_{pusat} = 5$: Bonus jika langkah tersebut mendekatkan robot ke titik tengah peta.
+    \item $P_{sejarah} = 60$: Penalti absolut jika petak sudah ada di memori \textit{Tabu List} lokal untuk mencegah \textit{looping}.
+    \item $P_{menara} = 1000$: Penalti mutlak \textit{Tower Starvation}. Bot secara \textit{greedy} menolak petak yang masuk ke dalam radius serang \textit{Defense Tower} musuh untuk mencegah kematian konyol.
+\end{itemize}
+
+\paragraph{Heuristik Pembangunan Menara Dinamis Berbasis Rasio}
+
+Ketika sebuah \textit{Soldier} tiba di sebuah puing \textit{ruin}, ia mengambil keputusan \textit{greedy} instan untuk menentukan tipe menara apa yang paling menguntungkan saat itu juga. Untuk menyeimbangkan ekonomi, bot menghitung rasio menara secara global:
+
+\begin{equation}
+    Rasio = \frac{\sum PaintTower}{\sum MoneyTower}
+\end{equation}
+
+Keputusan \textit{Greedy} mutlak yang diambil adalah jika $Rasio < 2.0$, maka robot \textbf{wajib} membangun \textit{Paint Tower} untuk memastikan \textit{supply chain} pasukan tidak terputus. Jika aman dan rasio terpenuhi, barulah \textit{Money Tower} dibangun.
+
+Selain itu, untuk menghindari kondisi di mana robot berebut membangun satu \textit{Ruin} yang sama, bot memampatkan koordinat 2D menjadi 12-bit integer dan menyimpannya di \textit{SharedArray} dengan masa kedaluwarsa:
+\begin{align}
+    Val &= ((X + 1) \ll 6) \lor (Y + 1) \\
+    Payload &= (Val \ll 16) \lor Ronde_{sekarang} \\
+    Usia &= Ronde_{sekarang} - (Payload \land \text{0xFFFF})
+\end{align}
+Jika $Usia > 20$, maka klaim \textit{greedy} atas puing tersebut dianggap hangus dan dapat diambil alih oleh \textit{Soldier} lain.
+
+\paragraph{Heuristik \textit{Heat-Seeking Splasher} dengan Mekanisme \textit{Anti-Clump}}
+
+Unit \textit{Splasher} dirancang sebagai proyektil penyebar cat. Heuristik serangan areanya mengevaluasi setiap petak 3x3 di sekitarnya. Titik pusat yang memberikan konversi petak kosong atau petak musuh menjadi petak sekutu paling banyak akan dipilih sebagai target tembakan (sebuah pencapaian \textit{local optimum}).
+
+Selain itu, navigasi \textit{Splasher} diberikan bobot negatif tambahan jika bergerak mendekati \textit{Splasher} kawan (\textit{Anti-Clumping}), sehingga mereka secara \textit{greedy} akan menyebar sejauh mungkin satu sama lain bagaikan gas yang mengisi ruang kosong, mengoptimalkan luas area yang diwarnai dalam waktu sesingkat mungkin.
 
 \subsection{Analisis Efisiensi dan Efektivitas}
 

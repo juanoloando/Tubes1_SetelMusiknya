@@ -1,7 +1,12 @@
 \section{Landasan Teori}
 \subsection{Algoritma Greedy}
 \subsubsection{Konsep Dasar}
-Algoritma \textit{greedy} merupakan salah satu alritma yang bisa digunakan untuk menyelesaikan tipe permasalahan optimasi. Algoritma ini menyarankan pembentukan sebuah solusi secara bertahap, di mana setiap langkah memiliki banyak pilihan yang bisa dievaluasi hingga akhirnya solusi lengkap untuk masalah tersebut bisa tercapai.
+Algoritma \textit{greedy} merupakan suatu metode sederhana yang paling populer untuk memecahkan persoalan optimasi (\textit{optimization problems}), yaitu persoalan mencari solusi optimal. Terdapat dua jenis persoalan optimasi:
+\begin{itemize}
+    \item Maksimasi (\textit{maximization}) - contohnya adalah profit, reward, dan lain sebagainya.
+    \item Minimasi (\textit{minimization}) - contohnya adalah \textit{cost}, waktu, jarak, dan lain sebagainya.
+\end{itemize}
+Algoritma ini menyarankan pembentukan sebuah solusi secara bertahap, di mana setiap langkah memiliki banyak pilihan yang bisa dievaluasi hingga akhirnya solusi lengkap untuk masalah tersebut bisa tercapai.
 Penentuan solusi yang bisa dievaluasi pada setiap tahap harus memenuhi kriteria-kriteria berikut: 
 \begin{itemize}
     \item Pilihan tidak boleh melanggar \textit{constraints} dari permasalah yang sedang diselesaikan
@@ -30,3 +35,15 @@ Untuk mencapai hal terrsebut, algoritma \textit{greedy} biasanya dibangun oleh b
     \item \textbf{Fungsi Objektif (\textit{Objective function})} \\
         Fungsi ini bertugas untuk mengukur ketercapaian keseluruhan ataupun nilai dari sebuah solusi yang dihasilkan. Inilah fungsi utama yang bertugas untuk mencapai target akhir persoalan, yaitu memaksimalisasi atau meminimalisasi nilai dari solusi yang didapatkan.
 \end{enumerate}
+
+\subsection{Mekanisme Kerja Program dan Implementasi Greedy pada Battlecode}
+\subsubsection{Sistem Eksekusi Berbasis Giliran (Turn-Based Execution)}
+Dalam permainan Battlecode, setiap robot menjalankan siklus hidupnya melalui struktur \textit{infinite loop} yang mengeksekusi instruksi pada setiap ronde (\textit{turn}). Karena adanya limitasi \textit{bytecode} (17.500 untuk robot, 20.000 untuk menara), robot tidak dapat melakukan komputasi yang berat seperti algoritma penelusuran jalur (\textit{pathfinding}) global secara menyeluruh pada setiap giliran. Oleh karena itu, program menggunakan pola \textit{Finite State Machine} (FSM) di mana robot akan mengevaluasi kondisi sekitarnya dan memutuskan transisi \textit{state} (misalnya: \texttt{EXPLORE}, \texttt{PAINT}, \texttt{BUILD\_TOWER}).
+
+\subsubsection{Penerapan Algoritma Greedy pada Bot}
+Algoritma \textit{greedy} diimplementasikan sebagai inti dari pengambilan keputusan robot, baik untuk pergerakan (\textit{movement}) maupun aksi (\textit{action}). Implementasi ini dilakukan melalui pendekatan heuristik spasial berbobot (\textit{weighted spatial heuristic}). 
+
+Alih-alih merencanakan serangkaian langkah panjang yang menguras \textit{bytecode}, robot akan mengevaluasi petak-petak (\textit{tiles}) yang berada tepat di sekitarnya. Robot memberikan skor pada setiap petak berdasarkan parameter taktis (seperti keberadaan cat musuh, reruntuhan, atau teman yang berdempetan). Keputusan \textit{greedy} diambil dengan memilih petak yang memberikan skor heuristik tertinggi (optimum lokal) pada giliran tersebut.
+
+\subsubsection{Eksekusi dan Siklus Hidup Bot}
+Secara arsitektur, program dijalankan melalui sebuah kelas utama \texttt{RobotPlayer} yang bertindak sebagai titik masuk (\textit{entry point}). Berdasarkan \texttt{UnitType}, kontrol dilempar ke kelas spesifik pewaris \texttt{BaseRobot} (seperti \texttt{SoldierUnit}, \texttt{SplasherUnit}, dll.). Setiap giliran, agen robot akan memanggil fungsi \texttt{tick()}, membaca pesan dari \textit{broadcasting} menara, menjalankan fungsi \textit{anti-clustering} (penghindar dempet), dan mengeksekusi aksi \textit{greedy}-nya sebelum akhirnya memanggil \texttt{Clock.yield()} untuk menyerahkan sisa eksekusi kepada \textit{engine} permainan.

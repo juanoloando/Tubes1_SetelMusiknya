@@ -162,6 +162,42 @@ Unit \textit{Splasher} dirancang sebagai proyektil penyebar cat. Heuristik seran
 
 Selain itu, navigasi \textit{Splasher} diberikan bobot negatif tambahan jika bergerak mendekati \textit{Splasher} kawan (\textit{Anti-Clumping}), sehingga mereka secara \textit{greedy} akan menyebar sejauh mungkin satu sama lain bagaikan gas yang mengisi ruang kosong, mengoptimalkan luas area yang diwarnai dalam waktu sesingkat mungkin.
 
+\subsubsection{Alternatif 3: Pendekatan Eksplorasi Simetris Secara Sadar (\texttt{altbot2})}
+
+Alternatif ketiga ini mengedepankan efisiensi informasi melalui pemanfaatan struktur geometri peta. Strategi ini berangkat dari observasi bahwa peta dalam Battlecode 2025 selalu memiliki salah satu dari tiga jenis simetri: rotasional 180$^\circ$, refleksi horizontal, atau refleksi vertikal. Dengan mengasumsikan simetri sejak awal, robot dapat melakukan pencarian lokasi menara musuh secara deterministik tanpa harus menjelajah seluruh peta secara acak.
+
+\paragraph{Heuristik Navigasi dengan Bias Simetri (\textit{Symmetry Bias})}
+Pada fase awal (\textit{early game}), setiap robot (khususnya \textit{Soldier}) bertindak sebagai informan. Fungsi seleksi pergerakan memberikan skor prioritas pada arah $d$ yang membawa robot mendekati koordinat "cermin" atau "putar" dari posisi markas sendiri. Skor evaluasi arah dihitung sebagai berikut:
+\begin{equation}
+    Score_{move}(d) = B_{sym} + B_{paint} - P_{trail} - P_{tower}
+\end{equation}
+Di mana komponen bobot ditentukan secara \textit{greedy} sebagai berikut:
+\begin{itemize}
+    \item $B_{sym} \in \{300, 500\}$: Bonus besar jika arah $d$ mendekatkan robot ke kandidat lokasi menara musuh berdasarkan asumsi simetri saat ini.
+    \item $B_{paint}$: Bonus tambahan jika ubin di arah tersebut belum diwarnai atau mengandung cat musuh.
+    \item $P_{trail} = 800$: Penalti jika ubin sudah ada dalam memori \textit{trail} lokal untuk mendorong eksplorasi ke area baru.
+    \item $P_{tower}$: Penalti jika arah tersebut terlalu dekat dengan menara sendiri yang sudah mapan, guna memastikan penyebaran unit.
+\end{itemize}
+
+\paragraph{Heuristik Konfirmasi dan Eliminasi Simetri (\textit{Symmetry Breaker})}
+Berbeda dengan pendekatan yang mengandalkan memori bersama (\textit{SharedMemory}), alternatif ini menggunakan logika \textit{local-deduction}. Setiap robot menyimpan tiga status kemungkinan simetri: \textit{Rotational}, \textit{Horizontal}, dan \textit{Vertical}. Setiap kali robot memindai fitur peta tertentu (seperti tembok atau reruntuhan), robot melakukan pengecekan validitas:
+\begin{enumerate}
+    \item Robot menghitung posisi simetris dari fitur tersebut berdasarkan ketiga jenis simetri.
+    \item Jika ditemukan bukti yang bertentangan (misalnya, ada tembok di posisi $(x, y)$ namun posisi simetrisnya adalah ruang kosong), maka simetri tersebut diberikan poin diskualifikasi.
+    \item Secara \textit{greedy}, robot akan segera mengubah arah pergerakannya menuju kandidat lokasi yang ditunjukkan oleh simetri dengan bukti kesalahan paling sedikit.
+\end{enumerate}
+
+\paragraph{Heuristik Prioritas Tindakan Lokal (\textit{Greedy Local Action})}
+Dalam setiap ronde, robot mengambil keputusan aksi berdasarkan urutan prioritas skor (tumpukan keputusan \textit{greedy}) tanpa melakukan simulasi jangka panjang untuk menghemat \textit{bytecode}:
+\begin{itemize}
+    \item \textbf{Prioritas 1 (Skor Maksimal):} Menyelesaikan pola menara (\textit{complete pattern}) jika robot berada di atas \textit{ruin}.
+    \item \textbf{Prioritas 2 (Skor Tinggi):} Menyerang atau mewarnai ubin musuh yang berada dalam radius aksi, terutama di dekat \textit{ruin} aktif.
+    \item \textbf{Prioritas 3 (Skor Menengah):} Melakukan \textit{Rush} agresif ke arah koordinat menara musuh jika simetri sudah terkonfirmasi melalui observasi lokal.
+    \item \textbf{Prioritas 4 (Skor Dasar):} Bergerak secara eksploratif ke arah pusat peta atau area netral untuk memperluas cakupan cat tim.
+\end{itemize}
+
+Pendekatan ini sangat efektif pada peta berukuran besar di mana waktu tempuh antar menara menjadi faktor krusial. Dengan mengetahui lokasi lawan lebih awal melalui deduksi simetri, tim dapat melakukan serangan terkoordinasi (\textit{timing attack}) sebelum lawan berhasil membangun ekonomi yang stabil.
+
 \subsection{Analisis Efisiensi dan Efektivitas}
 
 \textit{(Akan diisi setelah ketiga alternatif selesai dikembangkan.)}
@@ -169,3 +205,4 @@ Selain itu, navigasi \textit{Splasher} diberikan bobot negatif tambahan jika ber
 \subsection{Strategi \textit{Greedy} yang Dipilih}
 
 \textit{(Akan diisi setelah ketiga alternatif selesai dikembangkan.)}
+

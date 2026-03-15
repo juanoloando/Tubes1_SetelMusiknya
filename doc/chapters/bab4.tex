@@ -371,6 +371,197 @@
 
 \subsubsection{altbot2}
 
+\begin{pseudocode}{BaseRobot.java}
+function moveTo(target: MapLocation)
+{ Mencari arah pergerakan terbaik menuju target dengan greedy BugNav }
+{ Deklarasi }
+dir, bestDir : Direction
+score, bestScore : integer
+myLoc, nextLoc : MapLocation
+C : himpunan_kandidat_arah
+{ Algoritma }
+bestScore <- ∞
+bestDir <- null
+myLoc <- rc.getLocation()
+C <- \{NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST\}
+while C != \{\} do
+    dir <- SELEKSI(C)
+    C <- C - \{dir\}
+    if rc.canMove(dir) then
+        nextLoc <- myLoc + dir
+        score <- nextLoc.distanceSquaredTo(target) + SharedMemory.trailPenalty(nextLoc)
+        \{ Fungsi Obyektif: meminimalkan (jarak ke target + penalti jejak) \}
+        \{ Greedy Choice: pilih arah dengan skor TERKECIL saat ini \}
+        if score < bestScore then
+            bestScore <- score
+            bestDir <- dir
+        end if
+    end if
+end while
+if bestDir != null then
+    rc.move(bestDir)
+    SharedMemory.recordTrail(myLoc)
+end if
+\end{pseudocode}
+
+\begin{pseudocode}{SoldierUnit.java}
+function findBestRuin()
+{ Memilih reruntuhan yang paling menguntungkan untuk dibangun (greedy closest-to-complete) }
+{ Deklarasi }
+ruin, bestRuin : MapLocation
+score, bestScore : integer
+correct : integer
+{ Algoritma }
+bestScore <- -1
+bestRuin <- null
+for setiap ruin di rc.senseNearbyMapInfos() do
+    if ruin.hasRuin() dan rc.senseRobotAtLocation(ruin.getMapLocation()) = null then
+        correct <- countCorrectPatternTiles(ruin.getMapLocation())
+        score <- (correct × 10) - (rc.getLocation().distanceSquaredTo(ruin.getMapLocation()) / 5)
+        \{ Fungsi Obyektif: skor = progress pola × 10 - jarak \}
+        \{ Greedy Choice: pilih reruntuhan dengan skor TERTINGGI saat ini \}
+        if score > bestScore then
+            bestScore <- score
+            bestRuin <- ruin.getMapLocation()
+        end if
+    end if
+end for
+if bestRuin = null then
+    bestRuin <- SharedMemory.nearestRuin(rc.getLocation())
+end if
+targetRuin <- bestRuin
+\end{pseudocode}
+
+\begin{pseudocode}{SplasherUnit.java}
+function findBestSplashTarget()
+{ Mencari lokasi splash dengan cakupan cat maksimal (greedy AoE maximizer) }
+{ Deklarasi }
+tile, bestTarget : MapLocation
+score, bestScore : integer
+candidates : array MapInfo
+{ Algoritma }
+bestScore <- MIN_SPLASH_VALUE
+bestTarget <- null
+candidates <- rc.senseNearbyMapInfos(rc.getType().actionRadiusSquared)
+for i <- 0 to candidates.length do
+    tile <- candidates[i]
+    if not (tile.isWall() or tile.hasRuin() or not rc.canAttack(tile.getMapLocation())) then
+        score <- calcSplashScore(tile.getMapLocation())
+        \{ Fungsi Obyektif: skor = (cat musuh × 3) + (cat kosong × 1) \}
+        \{ Greedy Choice: pilih lokasi dengan skor TERTINGGI saat ini \}
+        if score > bestScore then
+            bestScore <- score
+            bestTarget <- tile.getMapLocation()
+        end if
+    end if
+end for
+if bestTarget != null then
+    rc.attack(bestTarget)
+end if
+\end{pseudocode}
+
+\begin{pseudocode}{MopperUnit.java}
+function findBestMopSwingDir()
+{ Mencari arah mop swing yang mengenai musuh terbanyak (greedy damage maximizer) }
+{ Deklarasi }
+dir, bestDir : Direction
+hits, bestHits : integer
+{ Algoritma }
+bestHits <- 0
+bestDir <- null
+for setiap dir di DIRS do
+    if rc.canMopSwing(dir) then
+        hits <- countMopSwingHits(dir)
+        \{ Fungsi Obyektif: hits = jumlah robot musuh dalam swing arc \}
+        \{ Greedy Choice: pilih arah dengan hits TERBANYAK saat ini \}
+        if hits > bestHits then
+            bestHits <- hits
+            bestDir <- dir
+        end if
+    end if
+end for
+if bestHits > 0 then
+    rc.mopSwing(bestDir)
+end if
+\end{pseudocode}
+
+\begin{pseudocode}{MopperUnit.java}
+function findBestEnemyPaintTarget()
+{ Mencari ubin cat musuh terbaik untuk dicuri (greedy steal + disruption) }
+{ Deklarasi }
+tile, bestTarget : MapLocation
+score, bestScore : integer
+{ Algoritma }
+bestScore <- -∞
+bestTarget <- null
+for setiap tile di rc.senseNearbyMapInfos(rc.getType().actionRadiusSquared) do
+    if tile.getPaint().isEnemy() dan rc.canAttack(tile.getMapLocation()) then
+        score <- (80 - distanceToNearestAlliedTower(tile.getMapLocation())) + (countAdjacentEnemyCard(tile.getMapLocation()) × 10)
+        \{ Fungsi Obyektif: skor = blokir supply line + jumlah tetangga musuh \}
+        \{ Greedy Choice: pilih ubin dengan skor TERTINGGI saat ini \}
+        if score > bestScore then
+            bestScore <- score
+            bestTarget <- tile.getMapLocation()
+        end if
+    end if
+end for
+if bestTarget != null then
+    rc.attack(bestTarget)
+end if
+\end{pseudocode}
+
+\begin{pseudocode}{TowerUnit.java}
+function findBestSpawnLocation(toSpawn: UnitType)
+{ Memilih lokasi spawn unit yang paling menguntungkan (greedy spawn optimizer) }
+{ Deklarasi }
+candidate, bestLoc : MapLocation
+score, bestScore : integer
+{ Algoritma }
+bestScore <- -∞
+bestLoc <- null
+for setiap dir di DIRS do
+    candidate <- rc.getLocation() + dir
+    if rc.canBuildRobot(toSpawn, candidate) then
+        score <- (600 - distanceToNearestRuin(candidate)) + (300 - distanceToPredictedEnemy(candidate)/2) + unpaintedBonus(candidate)
+        \{ Fungsi Obyektif: skor = kedekatan reruntuhan + arah musuh + bonus cat kosong \}
+        \{ Greedy Choice: pilih lokasi dengan skor TERTINGGI saat ini \}
+        if score > bestScore then
+            bestScore <- score
+            bestLoc <- candidate
+        end if
+    end if
+end for
+return bestLoc
+\end{pseudocode}
+
+\begin{pseudocode}{SoldierUnit.java}
+function moveForPaint()
+{ Memilih arah gerak yang memberikan nilai okupansi wilayah tertinggi (greedy paint-first movement) }
+{ Deklarasi }
+dir, bestDir : Direction
+score, bestScore : integer
+nextLoc : MapLocation
+{ Algoritma }
+bestScore <- -∞
+bestDir <- null
+for setiap dir di DIRS do
+    if rc.canMove(dir) then
+        nextLoc <- rc.getLocation() + dir
+        score <- calcMovePaintScore(nextLoc)
+        \{ Fungsi Obyektif: skor = nilai cat + bonus reruntuhan - penalti jejak \}
+        \{ Greedy Choice: pilih arah dengan skor TERTINGGI saat ini \}
+        if score > bestScore then
+            bestScore <- score
+            bestDir <- dir
+        end if
+    end if
+end for
+if bestDir != null then
+    rc.move(bestDir)
+    SharedMemory.recordTrail(rc.getLocation())
+end if
+\end{pseudocode}
+
 \subsection{Struktur Data, Fungsi, dan Prosedur}
 
 \subsubsection{Struktur Data Utama}

@@ -1,43 +1,25 @@
-    function findUnpaintedCluster(radius: integer) -> Location
-    { Mencari koordinat pusat cipratan cat yang menghasilkan luas cat terbesar }
-
-    { Deklarasi }
-    C : himpunan_kandidat_lokasi
-    tile : Tile
-    loc, adj_loc, bestLoc : Location
-    maxScore, localScore : integer
-    adj_dir : Direction
-
-    { Algoritma }
-    C <- getNearbyTiles(radius) { Kandidat adalah semua petak dalam jangkauan }
-    bestLoc <- null
-    maxScore <- -1
-
-    while C != {} do
-        tile <- SELEKSI(C)
-        C <- C - {tile}
-
-        { Fungsi Kelayakan (Feasibility Check) }
-        if isPassable(tile) and (getPaint(tile) != ALLY) then
-            loc <- tile.location
-            localScore <- 0
-
-            { Fungsi Obyektif: Hitung potensi jumlah cat kosong/musuh di 4 arah }
-            for each adj_dir in {NORTH, EAST, SOUTH, WEST} do
-                adj_loc <- loc + adj_dir
-                if hasEmptyPaint(adj_loc) then
-                    localScore <- localScore + 2
-                else if hasEnemyPaint(adj_loc) then
-                    localScore <- localScore + 3 { Menimpa cat musuh diberi bobot lebih }
-                end if
-            end for
-
-            { Perbarui optimum lokal }
-            if localScore > maxScore then
-                maxScore <- localScore
-                bestLoc <- loc
-            end if
+function moveForPaint()
+{ Memilih arah gerak yang memberikan nilai okupansi wilayah tertinggi (greedy paint-first movement) }
+{ Deklarasi }
+dir, bestDir : Direction
+score, bestScore : integer
+nextLoc : MapLocation
+{ Algoritma }
+bestScore <- -∞
+bestDir <- null
+for setiap dir di DIRS do
+    if rc.canMove(dir) then
+        nextLoc <- rc.getLocation() + dir
+        score <- calcMovePaintScore(nextLoc)
+        \{ Fungsi Obyektif: skor = nilai cat + bonus reruntuhan - penalti jejak \}
+        \{ Greedy Choice: pilih arah dengan skor TERTINGGI saat ini \}
+        if score > bestScore then
+            bestScore <- score
+            bestDir <- dir
         end if
-    end while
-
-    return bestLoc
+    end if
+end for
+if bestDir != null then
+    rc.move(bestDir)
+    SharedMemory.recordTrail(rc.getLocation())
+end if

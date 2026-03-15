@@ -1,7 +1,7 @@
 \section{Aplikasi Strategi \textit{Greedy}}
 \label{sec:bab3}
 
-\subsection{Pemetaan Persoalan Battlecode 2025 ke Elemen-Elemen Algoritma
+\subsection{Pemetaan Persoalan Battlecode ke Elemen-Elemen Algoritma
             \textit{Greedy}}
 
 Permainan Battlecode 2025 dapat dimodelkan sebagai sebuah persoalan
@@ -90,7 +90,7 @@ Di mana $\text{penalty}_{\text{trail}}$ memberikan bobot penalti sebesar 800 poi
 \end{enumerate}
 
 \paragraph{Fungsi Seleksi Spesifik Unit \textit{Mopper}}
-\textit{Mopper} berfokus pada pembersihan cat musuh tanpa melakukan isi ulang (\textit{refill}). Fungsi seleksi aksi memilih tile serangan berdasarkan kepadatan cat musuh di sekitar tile target:
+\textit{Mopper} berfokus membersihkan cat musuh tanpa melakukan isi ulang (\textit{refill}). Fungsi seleksi aksi memilih tile serangan berdasarkan kepadatan cat musuh di sekitar tile target:
 \begin{equation}
     \text{Score}_{\text{clean}} = (100 - \text{dist}_{\text{base}}) + 5 \cdot N_{\text{adjacent\_enemy\_paint}}
 \end{equation}

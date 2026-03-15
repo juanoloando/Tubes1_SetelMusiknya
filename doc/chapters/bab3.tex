@@ -1,0 +1,121 @@
+\section{Aplikasi Strategi \textit{Greedy}}
+\label{sec:bab3}
+
+\subsection{Pemetaan Persoalan Battlecode 2025 ke Elemen-Elemen Algoritma
+            \textit{Greedy}}
+
+Permainan Battlecode 2025 dapat dimodelkan sebagai sebuah persoalan
+optimasi yang diselesaikan secara inkremental, di mana setiap robot
+membuat keputusan aksi terbaik pada setiap ronde berdasarkan informasi
+lokal yang tersedia.  Pemetaan antara elemen-elemen persoalan Battlecode
+dan elemen-elemen algoritma \textit{greedy} adalah
+sebagai berikut.
+
+\subsubsection{Himpunan Kandidat}
+
+Himpunan kandidat $C$ terdiri atas seluruh aksi yang secara teknis dapat
+dilaksanakan oleh sebuah robot pada satu ronde.  Aksi-aksi tersebut
+meliputi pilihan arah gerak ke delapan tile tetangga, pilihan tile yang
+dapat diserang atau diwarnai dalam radius aksi, serta aksi-aksi khusus
+sesuai kemampuan tipe robot masing-masing.
+
+\subsubsection{Himpunan Solusi}
+
+Himpunan solusi $S$ adalah rangkaian aksi yang telah dipilih dan
+dilaksanakan oleh sebuah robot sepanjang permainan.  Himpunan ini
+dibangun secara bertahap: setiap ronde, satu aksi baru ditambahkan ke
+dalam $S$ berdasarkan hasil evaluasi fungsi seleksi.
+
+\subsubsection{Fungsi Seleksi}
+
+Fungsi seleksi menentukan aksi terbaik dari himpunan kandidat $C$ pada
+setiap langkah.  Fungsi ini diwujudkan melalui heuristik penilaian yang
+disesuaikan dengan tujuan masing-masing tipe robot: robot penyerang
+memilih tile yang paling menguntungkan untuk diwarnai, robot pembersih
+memilih cat musuh yang paling mengancam area sekutu, dan menara memilih
+jenis unit yang paling dibutuhkan berdasarkan komposisi pasukan saat ini.
+
+\subsubsection{Fungsi Kelayakan}
+
+Fungsi kelayakan memastikan bahwa aksi yang dipilih oleh fungsi seleksi
+dapat benar-benar dilaksanakan.  Setiap kandidat aksi diperiksa
+kelayakannya terlebih dahulu sebelum dieksekusi, misalnya memastikan tile
+tujuan dapat dijangkau, bahwa \textit{cooldown} robot sudah siap, serta
+bahwa sumber daya yang diperlukan tersedia.
+
+\subsubsection{Fungsi Solusi}
+
+Fungsi solusi dikelola sepenuhnya oleh \textit{game engine}.  Kondisi
+solusi terpenuhi apabila salah satu kondisi kemenangan tercapai:
+persentase tile bercat tim melebihi 70\%, atau seluruh robot dan menara
+lawan berhasil dihancurkan.
+
+\subsubsection{Fungsi Objektif}
+
+Fungsi objektif utama yang ingin dimaksimalkan adalah persentase tile
+yang berhasil diwarnai oleh tim:
+\begin{equation}
+    f_{\text{obj}} =
+    \frac{|\text{tile bercat tim sendiri}|}
+         {|\text{total tile yang dapat diwarnai}|}
+    \times 100\%
+    \label{eq:obj}
+\end{equation}
+Kemenangan diraih apabila $f_{\text{obj}} > 70\%$.  Secara lokal, setiap
+robot berusaha memaksimalkan kontribusinya terhadap (\ref{eq:obj}) dengan
+selalu memilih aksi yang memberikan peningkatan terbesar terhadap cakupan
+wilayah tim pada ronde yang sedang berjalan.
+
+\subsection{Eksplorasi Alternatif Solusi \textit{Greedy}: Strategi \textit{Nexus Expansion}}
+
+\subsubsection{Alternatif 1: Eksplorasi Agresif Tanpa Refill}
+
+\paragraph{Heuristik Umum: \textit{Greedy Exploration} dan \textit{Anti-Trailing}}
+Secara umum, seluruh unit menggunakan fungsi seleksi pergerakan yang meminimalkan fungsi biaya total $J$ untuk setiap arah $d \in D$:
+\begin{equation}
+    J(d) = \text{dist}^2(\text{loc} + d, \text{target}) + \text{penalty}_{\text{trail}}(\text{loc} + d)
+\end{equation}
+Di mana $\text{penalty}_{\text{trail}}$ memberikan bobot penalti sebesar 800 poin untuk tile yang sudah pernah dikunjungi (disimpan dalam memori \textit{trail}). Hal ini mencegah robot terjebak dalam siklus gerakan lokal dan memastikan eksplorasi yang tersebar luas.
+
+\paragraph{Fungsi Seleksi Spesifik Unit \textit{Soldier}}
+\textit{Soldier} bertindak sebagai unit pembangun dan pengecat presisi. Fungsi seleksinya dibagi menjadi tiga tahap utama:
+\begin{enumerate}
+    \item \textbf{Tahap Awal (\textit{Initial Paint}):} Melakukan pembagian tugas (\textit{role}) berdasarkan paritas ID robot ($ID \pmod 2$). Robot memilih tile di sekitar menara induk yang belum berwarna tim untuk menjamin ketersediaan cat di pangkalan.
+    \item \textbf{Tahap Konstruksi:} Memprioritaskan kandidat reruntuhan (\textit{ruin}) dengan skor:
+    \begin{equation}
+        \text{Score}_{\text{ruin}} = 10 \cdot N_{\text{correct\_pattern}} - \frac{\text{dist}^2}{5}
+    \end{equation}
+    di mana $N_{\text{correct\_pattern}}$ adalah jumlah tile pola yang sudah sesuai.
+    \item \textbf{Tahap Eksplorasi Agresif:} Jika cat habis ($\text{paint} \le 10$), fungsi seleksi akan memilih arah yang memaksimalkan jarak dari menara sekutu terdekat (\textit{move away}) untuk melakukan \textit{scouting}.
+\end{enumerate}
+
+\paragraph{Fungsi Seleksi Spesifik Unit \textit{Mopper}}
+\textit{Mopper} berfokus pada pembersihan cat musuh tanpa melakukan isi ulang (\textit{refill}). Fungsi seleksi aksi memilih tile serangan berdasarkan kepadatan cat musuh di sekitar tile target:
+\begin{equation}
+    \text{Score}_{\text{clean}} = (100 - \text{dist}_{\text{base}}) + 5 \cdot N_{\text{adjacent\_enemy\_paint}}
+\end{equation}
+Untuk pertempuran unit (\textit{combat}), \textit{Mopper} secara \textit{greedy} memilih arah ayunan (\textit{mop swing}) yang menghasilkan hit terbanyak terhadap robot lawan.
+
+\paragraph{Fungsi Seleksi Spesifik Unit \textit{Splasher}}
+\textit{Splasher} menggunakan logika \textit{quadrant density} untuk menentukan arah pergerakan. Fungsi seleksi membagi area pandang menjadi empat kuadran dan menghitung densitas cat target (kosong atau musuh):
+\begin{equation}
+    \text{Density}_q = \frac{\sum \text{Score}_{\text{tile} \in q}}{\text{Count}_{\text{tile} \in q}}
+\end{equation}
+Robot akan bergerak menuju kuadran dengan $\text{Density}_q$ tertinggi. Dalam pemilihan target serangan, \textit{Splasher} memilih tile yang memaksimalkan dampak area (\textit{splash damage}) dengan bobot 3 untuk cat musuh dan 1 untuk tile kosong.
+
+\paragraph{Fungsi Seleksi Strategis \textit{Tower}}
+Menara (\textit{TowerUnit}) mengimplementasikan fungsi seleksi produksi untuk menjaga keseimbangan komposisi pasukan. Keputusan tipe unit yang diproduksi ($T$) didasarkan pada rasio populasi saat ini ($R$):
+\begin{itemize}
+    \item Jika $R_{\text{mopper}} < 15\%$, pilih \textit{Mopper}.
+    \item Jika $R_{\text{soldier}} < 40\%$, pilih \textit{Soldier}.
+    \item Jika $R_{\text{splasher}} < 45\%$, pilih \textit{Splasher}.
+\end{itemize}
+Selain itu, menara melakukan \textit{broadcasting} lokasi secara berkala untuk memfasilitasi koordinasi simetris antar unit, memastikan robot tahu arah mana yang harus dijauhi saat cat mereka habis.
+
+\subsection{Analisis Efisiensi dan Efektivitas}
+
+\textit{(Akan diisi setelah ketiga alternatif selesai dikembangkan.)}
+
+\subsection{Strategi \textit{Greedy} yang Dipilih}
+
+\textit{(Akan diisi setelah ketiga alternatif selesai dikembangkan.)}

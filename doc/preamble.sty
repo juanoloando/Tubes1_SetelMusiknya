@@ -254,10 +254,11 @@
   \hyperref[#1]{\tcbox[chip-docs-light]{#2}}%
 }
 
-%psuedocode
-
+% warna
+\usepackage[dvipsnames]{xcolor}
 \definecolor{codegray}{RGB}{245,245,245}
 
+%psuedocode
 \newtcblisting{pseudocode}[2][]{
   enhanced,
   breakable,
@@ -267,7 +268,7 @@
   arc=4pt,
   outer arc=4pt,
   listing only,
-  title=\textbf{},
+  title=\textbf{#2},
   fonttitle=\bfseries,
   coltitle=black,
   listing options={

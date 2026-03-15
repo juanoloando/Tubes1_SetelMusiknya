@@ -1,8 +1,10 @@
 \section{Implementasi dan Pengujian}
-\subsection{Pseudocode untuk Alternatif Solusi}
-\subsubsection{mainbot}
-\subsubsection{altbot1}
 
+\subsection{Pseudocode untuk Alternatif Solusi}
+
+\subsubsection{mainbot}
+
+\subsubsection{altbot1}
 \begin{pseudocode}{Navigation.java}
     function moveGreedyMacro(targetDir: Direction, history: array of Location, isSplasher: boolean) -> boolean
     { Mencari dan mengeksekusi arah pergerakan terbaik berdasarkan nilai heuristik tertinggi }
@@ -179,9 +181,87 @@
 
     return bestLoc
 \end{pseudocode}
+
 \subsubsection{altbot2}
+
 \subsection{Struktur Data, Fungsi, dan Prosedur}
+
 \subsubsection{Struktur Data Utama}
+
 \subsubsection{Prosedur dan Fungsi Pendukung Logika Greedy}
+
 \subsection{Pengujian \textit{Greedy}}
+
+\subsubsection{mainbot vs altbot1 DefaultHuge (Pemenang : mainbot)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/mainbotvsaltbot1_huge.png}
+    \caption{Statistik dan Kondisi Akhir mainbot vs altbot1 pada Map DefaultHuge}
+    \label{fig:contoh}
+\end{figure}
+
+\subsubsection{mainbot vs altbot1 DefaultSmall (Pemenang : mainbot)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/mainbotvsaltbot1_small.png}
+    \caption{Statistik dan Kondisi Akhir mainbot vs altbot1 pada Map DefaultSmall}
+    \label{fig:contoh}
+\end{figure}
+
+\subsubsection{mainbot vs altbot1 DonkeyKong (Pemenang : mainbot)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/mainbotvsaltbot1_donkey.png}
+    \caption{Statistik dan Kondisi Akhir mainbot vs altbot1 pada Map DonkeyKong}
+    \label{fig:contoh}
+\end{figure}
+
+\subsubsection{mainbot vs altbot2 DefaultHuge (Pemenang : mainbot)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/mainbotvsaltbot2_huge.png}
+    \caption{Statistik dan Kondisi Akhir mainbot vs altbot2 pada Map DefaultHuge}
+    \label{fig:contoh}
+\end{figure}
+
+\subsubsection{mainbot vs altbot2 DefaultSmall (Pemenang : mainbot)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/mainbotvsaltbot2_small.png}
+    \caption{Statistik dan Kondisi Akhir mainbot vs altbot2 pada Map DefaultSmall}
+    \label{fig:contoh}
+\end{figure}
+
+\subsubsection{mainbot vs altbot2 DonkeyKong (Pemenang : mainbot)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/mainbotvsaltbot2_donkey.png}
+    \caption{Statistik dan Kondisi Akhir mainbot vs altbot2 pada Map DonkeyKong}
+    \label{fig:contoh}
+\end{figure}
+
+\subsubsection{altbot1 vs altbot2 DefaultHuge (Pemenang : altbo1)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/altbot1vsaltbot2_huge.png}
+    \caption{Statistik dan Kondisi Akhir altbot1 vs altbot2 pada Map DefaultHuge}
+    \label{fig:contoh}
+\end{figure}
+
+\subsubsection{altbot1 vs altbot2 DefaultSmall (Pemenang : altbo2)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/altbot1vsaltbo2_small.png}
+    \caption{Statistik dan Kondisi Akhir altbot1 vs altbot2 pada Map DefaultSmall}
+    \label{fig:contoh}
+\end{figure}
+
+\subsubsection{altbot1 vs altbot2 DonkeyKong (Pemenang : altbo1)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/altbot1vsaltbot2_donkey.png}
+    \caption{Statistik dan Kondisi Akhir altbot1 vs altbot2 pada Map DonkeyKong}
+    \label{fig:contoh}
+\end{figure}
+
 \subsection{Analisis Hasil Pengujian}

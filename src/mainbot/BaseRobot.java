@@ -35,9 +35,9 @@ public abstract class BaseRobot {
             try {
                 tick();
             } catch (GameActionException e) {
-                System.out.println("[NEXUS] GameActionException: " + e.getMessage());
+                System.out.println("[MAINBOT] GameActionException: " + e.getMessage());
             } catch (Exception e) {
-                System.out.println("[NEXUS] Exception: " + e.getMessage());
+                System.out.println("[MAINBOT] Exception: " + e.getMessage());
             } finally {
                 Clock.yield();
             }
@@ -108,7 +108,7 @@ public abstract class BaseRobot {
     }
 
     
-    protected void greedyExplore(RobotController rc) throws GameActionException {
+    protected void roamExplore(RobotController rc) throws GameActionException {
         if (!rc.isMovementReady()) return;
 
         if (exploreTarget == null || rc.getLocation().distanceSquaredTo(exploreTarget) < 4) {

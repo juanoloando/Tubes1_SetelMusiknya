@@ -56,10 +56,10 @@ public class TowerUnit extends BaseRobot {
         int paint = rc.getPaint();
         if (paint < 200) return;
 
-        // PERBAIKAN: Spawn simetris untuk 2 soldier awal
+        // Dua soldier awal dipisah agar cakupan arah pembukaan lebih luas.
         if (rc.getRoundNum() < 30 && soldierSpawned < 2) {
-            // Gunakan index DIRS yang berbeda untuk soldier 1 dan 2
-            // Ini akan otomatis mirror karena DIRS [0-3] dan [4-7] saling berlawanan
+            // Spawn pertama dan kedua memakai blok arah yang saling berlawanan.
+            // Kombinasi indeks 0..3 dan 4..7 menjaga distribusi awal tetap seimbang.
             int startIdx = (soldierSpawned == 0) ? 0 : 4;
             
             for (int i = 0; i < DIRS.length; i++) {

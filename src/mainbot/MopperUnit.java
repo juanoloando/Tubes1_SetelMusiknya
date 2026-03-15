@@ -243,7 +243,7 @@ public class MopperUnit extends BaseRobot {
     if (rc.getPaint() <= 0) {
         moveAwayFromHome();
     } else {
-        greedyExplore(rc);
+        roamExplore(rc);
     }
 }
 

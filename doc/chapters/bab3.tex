@@ -198,11 +198,45 @@ Dalam setiap ronde, robot mengambil keputusan aksi berdasarkan urutan prioritas 
 
 Pendekatan ini sangat efektif pada peta berukuran besar di mana waktu tempuh antar menara menjadi faktor krusial. Dengan mengetahui lokasi lawan lebih awal melalui deduksi simetri, tim dapat melakukan serangan terkoordinasi (\textit{timing attack}) sebelum lawan berhasil membangun ekonomi yang stabil.
 
-\subsection{Analisis Efisiensi dan Efektivitas}
+\subsection{Analisis Efisiensi dan Efektivitas Alternatif Solusi Greedy}
 
-\textit{(Akan diisi setelah ketiga alternatif selesai dikembangkan.)}
+Bagian ini mengevaluasi kinerja ketiga alternatif strategi \textit{greedy} berdasarkan penggunaan sumber daya komputasi (\textit{bytecode}) dan keberhasilan strategi tersebut dalam berbagai kondisi peta.
+
+\begin{enumerate}
+    \item \textbf{Analisis Efisiensi (Penggunaan Sumber Daya)}
+    \begin{itemize}
+        \item \textbf{Alternatif 1 (\texttt{mainbot}):} Paling hemat energi. Karena logikanya sederhana dan tidak memproses banyak aturan pengisian ulang (\textit{refill}), robot bisa lebih fokus memantau wilayah yang luas. Cara geraknya juga sangat ringan sehingga jarang terjadi kendala teknis. Namun, bot ini berisiko kehilangan banyak pasukan karena robot sering kehabisan cat di area lawan.
+        
+        \item \textbf{Alternatif 2 (\texttt{altbot1}):} Memiliki beban kerja paling berat. Bot ini menggunakan sistem perhitungan yang sangat detail dan sistem catatan bersama (\textit{SharedArray}) yang kompleks untuk mengatur posisi robot. Meskipun ada sistem pengaman agar bot tidak melampaui batas waktu, bot ini berisiko melambat jika jumlah pasukan sudah sangat banyak.
+        
+        \item \textbf{Alternatif 3 (\texttt{altbot2}):} Memiliki beban kerja menengah. Bot ini menghabiskan banyak energi di awal permainan untuk membaca pesan dan menebak bentuk peta. Keuntungannya, bot ini cukup hemat dalam penggunaan memori karena setiap unit bekerja secara mandiri setelah mengetahui posisi lawan.
+    \end{itemize}
+
+    \item \textbf{Analisis Efektivitas (Pencapaian Tujuan)}
+    \begin{itemize}
+        \item \textbf{Alternatif 1 (\texttt{mainbot}):} Sangat unggul untuk serangan cepat. Karena robot terus menekan tanpa sering pulang untuk mengisi cat, wilayah lawan bisa dikuasai dengan sangat cepat pada awal permainan.
+        
+        \item \textbf{Alternatif 2 (\texttt{altbot1}):} Paling tangguh untuk permainan jangka panjang. Bot ini sangat pintar mengatur ekonomi tim melalui perhitungan jumlah menara. Selain itu, robot penyerangnya diatur agar menyebar merata dan tidak menumpuk, sehingga penguasaan wilayah menjadi lebih stabil di seluruh peta.
+        
+        \item \textbf{Alternatif 3 (\texttt{altbot2}):} Unggul dalam mencari lokasi musuh dan pertempuran taktis. Dengan menebak simetri peta sejak awal, bot ini bisa langsung menuju markas musuh dengan tepat. Dalam pertarungan, bot ini sangat mematikan karena selalu mengincar musuh yang paling mudah dikalahkan terlebih dahulu.
+    \end{itemize}
+\end{enumerate}
+
+Keberhasilan ketiga strategi ini sangat bergantung pada ukuran peta. Pada peta kecil, strategi serangan cepat seperti Alternatif 1 dan 3 lebih efektif. Namun pada peta besar, sistem kendali wilayah dan pengaturan logistik milik Alternatif 2 jauh lebih bisa diandalkan agar tim tidak kehabisan sumber daya di tengah jalan.
 
 \subsection{Strategi \textit{Greedy} yang Dipilih}
 
-\textit{(Akan diisi setelah ketiga alternatif selesai dikembangkan.)}
+Berdasarkan analisis di atas, strategi yang dipilih sebagai solusi akhir adalah \textbf{Alternatif 1 (\texttt{mainbot})} yang dikombinasikan dengan beberapa fitur unggulan dari \textbf{Alternatif 2 (\texttt{altbot1})}. 
 
+Penggabungan ini dilakukan untuk mengambil kecepatan dan ringannya program dari \texttt{mainbot}, sekaligus memperbaiki masalah logistiknya menggunakan sistem dari \texttt{altbot1}.
+
+\paragraph{Alasan dan Pertimbangan Pemilihan:}
+\begin{enumerate}
+    \item \textbf{Kecepatan Ekspansi (Momentum):} Dalam kompetisi ini, siapa yang cepat menguasai lahan biasanya akan menang. Kecepatan \texttt{mainbot} dalam menyebar tanpa aturan pengisian cat yang rumit memungkinkannya menguasai wilayah luas sebelum musuh siap bertahan.
+    
+    \item \textbf{Performa yang Stabil:} Batasan waktu berpikir robot sangat ketat. Logika \texttt{mainbot} yang sederhana memastikan robot tetap bisa bergerak lancar dan menyerang tepat waktu meskipun jumlah pasukan tim sudah sangat banyak. Ini menghindari risiko robot macet yang sering dialami Alternatif 2.
+    
+    \item \textbf{Ketangguhan di Berbagai Peta:} Strategi ini tidak bergantung pada tebak-tebakan bentuk peta yang berisiko salah. Bot bekerja hanya berdasarkan apa yang dilihat di sekitarnya, sehingga lebih konsisten saat menghadapi bentuk peta yang aneh atau penuh rintangan.
+    
+    \item \textbf{Penggabungan Keunggulan:} Untuk mengatasi masalah "robot mati perlahan" karena kehabisan cat pada \texttt{mainbot} asli, kami menambahkan sistem \textbf{Manajemen Menara} dari \texttt{altbot1}. Dengan sistem ini, tim akan dipaksa membangun menara penghasil cat saat stok menipis, sehingga pasukan tetap bisa bergerak agresif namun tetap memiliki cadangan logistik yang aman.
+\end{enumerate}

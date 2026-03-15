@@ -1,13 +1,43 @@
+    function findUnpaintedCluster(radius: integer) -> Location
+    { Mencari koordinat pusat cipratan cat yang menghasilkan luas cat terbesar }
 
-while game_not_finished do
-    sense nearby ruins
-    if ruin available then
-        choose nearest ruin
-        move toward ruin
-        paint required pattern
-        build tower
-    else
-        explore map
-    end if
-end while
+    { Deklarasi }
+    C : himpunan_kandidat_lokasi
+    tile : Tile
+    loc, adj_loc, bestLoc : Location
+    maxScore, localScore : integer
+    adj_dir : Direction
 
+    { Algoritma }
+    C <- getNearbyTiles(radius) { Kandidat adalah semua petak dalam jangkauan }
+    bestLoc <- null
+    maxScore <- -1
+
+    while C != {} do
+        tile <- SELEKSI(C)
+        C <- C - {tile}
+
+        { Fungsi Kelayakan (Feasibility Check) }
+        if isPassable(tile) and (getPaint(tile) != ALLY) then
+            loc <- tile.location
+            localScore <- 0
+
+            { Fungsi Obyektif: Hitung potensi jumlah cat kosong/musuh di 4 arah }
+            for each adj_dir in {NORTH, EAST, SOUTH, WEST} do
+                adj_loc <- loc + adj_dir
+                if hasEmptyPaint(adj_loc) then
+                    localScore <- localScore + 2
+                else if hasEnemyPaint(adj_loc) then
+                    localScore <- localScore + 3 { Menimpa cat musuh diberi bobot lebih }
+                end if
+            end for
+
+            { Perbarui optimum lokal }
+            if localScore > maxScore then
+                maxScore <- localScore
+                bestLoc <- loc
+            end if
+        end if
+    end while
+
+    return bestLoc

@@ -15,3 +15,191 @@ while game_not_finished do
 end while
 
 \end{pseudocode}
+
+\subsection{altbot1}
+\subsubsection{Pseudocode untuk Alternatif Solusi}
+\begin{pseudocode}{Navigation.java}
+    function moveGreedyMacro(targetDir: Direction, history: array of Location, isSplasher: boolean) -> boolean
+    { Mencari dan mengeksekusi arah pergerakan terbaik berdasarkan nilai heuristik tertinggi }
+
+    { Deklarasi }
+    C : himpunan_kandidat_arah
+    dir, bestDir : Direction
+    score, bestScore : integer
+    myLoc, nextLoc, center : Location
+
+    { Algoritma }
+    bestScore <- -99999
+    bestDir <- null
+    myLoc <- getCurrentLocation()
+    center <- getCenterLocation()
+
+    { Inisialisasi himpunan kandidat dengan 8 arah mata angin }
+    C <- {NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST}
+
+    while C != {} do
+        dir <- SELEKSI(C) { Pilih satu arah dari himpunan kandidat }
+        C <- C - {dir}
+        
+        if canMove(dir) then
+            nextLoc <- myLoc + dir
+            score <- 0
+            
+            { Fungsi Obyektif: Hitung bobot keuntungan dari arah ini }
+            score <- score + evaluateDirectionAlignment(dir, targetDir)
+            
+            if getPaint(nextLoc) = ALLY then
+                score <- score + 8
+            else if getPaint(nextLoc) = EMPTY then
+                score <- score + 10
+            else
+                score <- score - 15
+            end if
+            
+            if distance(nextLoc, center) < distance(myLoc, center) then
+                score <- score + 5
+            end if
+            
+            { Fungsi Kelayakan / Penalti }
+            score <- score - evaluateTowerStarvation(nextLoc)
+            score <- score - evaluateHistoryPenalty(nextLoc, history)
+            
+            { Pembaruan solusi optimum lokal }
+            if score > bestScore then
+                bestScore <- score
+                bestDir <- dir
+            end if
+        end if
+    end while
+
+    if bestDir != null then
+        move(bestDir)
+        return true
+    else
+        return false
+    end if
+\end{pseudocode}
+
+\begin{pseudocode}{Heuristic.java}
+    function pickBestTarget(enemies: array of Robot, myLoc: Location) -> Robot
+    { Mencari target musuh dengan ancaman tertinggi dan jarak terdekat }
+
+    { Deklarasi }
+    C : himpunan_kandidat_musuh
+    enemy, bestTarget : Robot
+    score, bestScore, dist, bestDist : integer
+
+    { Algoritma }
+    C <- enemies { Kandidat adalah semua musuh yang terdeteksi sensor }
+    bestTarget <- null
+    bestScore <- -99999
+    bestDist <- 99999
+
+    while C != {} do
+        enemy <- SELEKSI(C)
+        C <- C - {enemy}
+        
+        { Fungsi Obyektif }
+        score <- scoreAttackTarget(enemy)
+        dist <- distance(myLoc, enemy.location)
+        
+        { Keputusan Greedy: Ambil yang skornya paling besar, atau jika sama besar ambil yang terdekat }
+        if (score > bestScore) or ((score = bestScore) and (dist < bestDist)) then
+            bestScore <- score
+            bestDist <- dist
+            bestTarget <- enemy
+        end if
+    end while
+
+    return bestTarget
+\end{pseudocode}
+
+\begin{pseudocode}{Heuristic.java}
+    function scoreTowerType(ruinLoc: Location, currentChips: integer, currentPaint: integer, round: integer) -> TowerType
+    { Menentukan tipe menara berdasarkan kondisi sumber daya yang paling kritis saat ini }
+
+    { Deklarasi }
+    isFrontline : boolean
+    paintTowersCount, moneyTowersCount : integer
+
+    { Algoritma }
+    isFrontline <- checkEnemyPaintNearby(ruinLoc, 16)
+
+    { Evaluasi Greedy: Selesaikan masalah yang paling mendesak terlebih dahulu }
+    if (currentPaint < 1000) or (round <= 100) then
+        return PAINT_TOWER
+    end if
+
+    if isFrontline and (currentChips >= 2000) and (currentPaint >= 1000) then
+        return DEFENSE_TOWER
+    end if
+
+    paintTowersCount <- countTowers(PAINT_TOWER)
+    moneyTowersCount <- countTowers(MONEY_TOWER)
+
+    { Penyeimbangan Rasio Greedy }
+    if moneyTowersCount = 0 then
+        return MONEY_TOWER
+    end if
+
+    if (paintTowersCount / moneyTowersCount) < 2.0 then
+        return PAINT_TOWER
+    else
+        return MONEY_TOWER
+    end if
+\end{pseudocode}
+
+\begin{pseudocode}{Splasher.java}
+    function findUnpaintedCluster(radius: integer) -> Location
+    { Mencari koordinat pusat cipratan cat yang menghasilkan luas cat terbesar }
+
+    { Deklarasi }
+    C : himpunan_kandidat_lokasi 
+    tile : Tile
+    loc, adj_loc, bestLoc : Location
+    maxScore, localScore : integer
+    adj_dir : Direction
+
+    { Algoritma }
+    C <- getNearbyTiles(radius) { Kandidat adalah semua petak dalam jangkauan }
+    bestLoc <- null
+    maxScore <- -1
+
+    while C != {} do
+        tile <- SELEKSI(C)
+        C <- C - {tile}
+        
+        { Fungsi Kelayakan (Feasibility Check) }
+        if isPassable(tile) and (getPaint(tile) != ALLY) then
+            loc <- tile.location
+            localScore <- 0
+            
+            { Fungsi Obyektif: Hitung potensi jumlah cat kosong/musuh di 4 arah }
+            for each adj_dir in {NORTH, EAST, SOUTH, WEST} do
+                adj_loc <- loc + adj_dir
+                if hasEmptyPaint(adj_loc) then
+                    localScore <- localScore + 2
+                else if hasEnemyPaint(adj_loc) then
+                    localScore <- localScore + 3 { Menimpa cat musuh diberi bobot lebih }
+                end if
+            end for
+            
+            { Perbarui optimum lokal }
+            if localScore > maxScore then
+                maxScore <- localScore
+                bestLoc <- loc
+            end if
+        end if
+    end while
+
+    return bestLoc
+\end{pseudocode}
+
+\subsubsection{Struktur Data, Fungsi, dan Prosedur altbot1}
+\begin{enumerate}
+    \item Struktur Data Utama \\
+        \begin{itemize}
+            \item nganu, isi apa kek
+        \end{itemize}
+    \item Prosedur dan Fungsi Pendukung Logika Greedy
+\end{enumerate}

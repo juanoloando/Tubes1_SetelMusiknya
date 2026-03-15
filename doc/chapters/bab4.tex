@@ -694,5 +694,31 @@ Fungsi dan prosedur dalam bot ini dibagi berdasarkan spesialisasi unit. Masing-m
     \caption{Statistik dan Kondisi Akhir altbot1 vs altbot2 pada Map DonkeyKong}
     \label{fig:contoh}
 \end{figure}
-
 \subsection{Analisis Hasil Pengujian}
+
+Berdasarkan hasil pengujian yang telah dilakukan dengan mempertandingkan ketiga bot (\texttt{mainbot}, \texttt{altbot1}, dan \texttt{altbot2}) pada berbagai jenis peta permainan (seperti \textit{Default Huge}, \textit{Default Small}, dan \textit{Donkey Kong}), dapat dievaluasi efektivitas strategi \textit{greedy} di kondisi nyata. 
+
+Secara umum, algoritma \textit{greedy} berhasil memberikan nilai yang sangat optimal dalam hal kecepatan pengambilan keputusan dan efisiensi komputasi. Namun, terdapat beberapa kondisi khusus di mana strategi ini terjebak dalam nilai optimal lokal (\textit{local optima}) dan gagal mencapai kemenangan.
+
+\subsubsection{Kondisi di mana Strategi Greedy Mendapatkan Nilai Optimal}
+Strategi \textit{greedy} terbukti sangat berhasil dan mencapai performa maksimal pada kondisi-kondisi berikut:
+
+\begin{enumerate}
+    \item \textbf{Fase Awal Permainan (\textit{Early Game}):} Keputusan \textit{greedy} untuk langsung menyebar dan mengecat petak kosong sebanyak mungkin terbukti sangat efektif. Hal ini terlihat dari dominasi \texttt{mainbot} atas \texttt{altbot2} pada peta \textit{Default Huge}. Karena algoritma pergerakannya tidak membuang waktu untuk perhitungan rumit di masa depan, penguasaan peta (\textit{map control}) dapat terjadi dengan sangat cepat.
+    \item \textbf{Pertempuran Taktis (\textit{Micro-battle}):} Saat saling berhadapan, keputusan \textit{greedy} untuk menyerang musuh dengan sisa HP terendah atau musuh yang paling berbahaya terbukti sangat ampuh. Hal ini secara efektif mengurangi jumlah pasukan musuh dengan cepat tanpa membebani instruksi komputasi (\textit{bytecode}).
+    \item \textbf{Topologi Peta yang Luas dan Terbuka:} Pada peta tanpa banyak rintangan kompleks, keputusan untuk melangkah ke arah yang memiliki cat sekutu atau tanah kosong (berdasarkan skor fungsi objektif) bekerja dengan sangat sempurna untuk menyebarkan warna tim secara masif.
+\end{enumerate}
+
+\subsubsection{Kondisi di mana Strategi Greedy Gagal (Terjebak \textit{Local Optima})}
+Meskipun cepat, pengujian juga menunjukkan bahwa strategi murni \textit{greedy} tidak selalu menghasilkan nilai optimal global. Strategi ini sering mengalami kegagalan pada situasi berikut:
+
+\begin{enumerate}
+    \item \textbf{Ketidaksesuaian Strategi dengan Ukuran Peta:} Kegagalan strategi \textit{greedy} terlihat jelas pada kekalahan \texttt{altbot1} melawan \texttt{altbot2} di peta \textit{Default Small}. Algoritma \texttt{altbot1} dirancang secara \textit{greedy} untuk fokus membangun ekonomi jangka panjang (menjaga rasio \textit{Paint Tower}). Namun, pada peta kecil, musuh akan datang menyerang dengan sangat cepat. Keputusan untuk memprioritaskan pembangunan infrastruktur menjadi tidak optimal karena markas hancur terlebih dahulu oleh serangan kilat (\textit{rush}) musuh.
+    \item \textbf{Terjebak Rintangan Panjang atau Labirin:} Pada peta dengan topologi dinding yang rumit seperti \textit{Donkey Kong}, robot murni \textit{greedy} sering kali menabrak area buntu. Karena algoritma ini hanya mencari nilai skor tertinggi 1 petak ke depan, robot memerlukan waktu yang lama untuk menyadari bahwa ia berada di jalan buntu. Walaupun telah dibantu dengan memori sejarah pergerakan (\textit{Tabu List}), robot tetap membuang banyak waktu untuk memutar balik dibandingkan dengan algoritma pencarian jalur yang menyeluruh seperti A-Star.
+    \item \textbf{Kehabisan Sumber Daya (Kematian Konyol):} Jika fungsi objektif \textit{greedy} terlalu memprioritaskan serangan ke wilayah musuh tanpa mempertimbangkan sisa cat, robot akan terus maju hingga catnya habis. Saat hal ini terjadi, robot tidak dapat bergerak dan akhirnya mati perlahan akibat pinalti dari permainan. Ini menunjukkan bahwa pilihan yang terlihat menguntungkan saat itu (menyerang) justru membawa kerugian besar di masa depan.
+\end{enumerate}
+
+\subsubsection{Kesimpulan Analisis}
+Secara keseluruhan, pendekatan \textit{greedy} sangat cocok diterapkan pada permainan Battlecode 2025. Sifat permainan yang sangat dinamis membuat perhitungan rencana jangka panjang sering kali menjadi tidak relevan karena posisi kawan dan lawan selalu berubah setiap detiknya. 
+
+Agar strategi \textit{greedy} terhindar dari jebakan kegagalan (\textit{local optima}), \textbf{pemberian bobot pada fungsi objektif harus dibuat dinamis}. Bobot keputusan harus mampu beradaptasi dengan ukuran peta, jumlah ronde, dan sisa cat yang dimiliki robot. Dengan demikian, keputusan optimal lokal yang diambil setiap detiknya akan selalu selaras dengan pencapaian optimal global, yaitu memenangkan pertandingan.

@@ -126,15 +126,15 @@ battlecode2025/
 
 ## Teknologi yang Digunakan
 
-* **Bahasa Pemrograman**: Java 17+
+* **Bahasa Pemrograman**: Java 21+
 * **Build Tool**: Gradle (Battlecode Scaffold)
 * **Algoritma Utama**: Greedy
 
 ---
 
 ## Author
-**Juan Oloando Simanungkalit** NIM: 13524032
-**Edward David Rumahorbo** NIM: 13524036
+**Juan Oloando Simanungkalit** NIM: 13524032 <br>
+**Edward David Rumahorbo** NIM: 13524036 <br>
 **Reinsen Silitonga** NIM: 13524093
 
 Program Studi: Teknik Informatika - Institut Teknologi Bandung

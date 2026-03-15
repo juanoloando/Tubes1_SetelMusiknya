@@ -12,11 +12,12 @@
 \contentsline {subsubsection}{\numberline {1.2.9}Komunikasi}{4}{subsubsection.1.2.9}%
 \contentsline {subsubsection}{\numberline {1.2.10}Batasan Program}{4}{subsubsection.1.2.10}%
 \contentsline {subsubsection}{\numberline {1.2.11}Tujuan Tugas Besar}{4}{subsubsection.1.2.11}%
-\contentsline {section}{\numberline {2}Landasan Teori}{4}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Algoritma Greedy}{4}{subsection.2.1}%
-\contentsline {subsubsection}{\numberline {2.1.1}Konsep Dasar}{4}{subsubsection.2.1.1}%
+\contentsline {section}{\numberline {2}Landasan Teori}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Algoritma Greedy}{5}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Konsep Dasar}{5}{subsubsection.2.1.1}%
 \contentsline {subsubsection}{\numberline {2.1.2}Elemen-Elemen}{5}{subsubsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.2}Mekanisme Kerja Program dan Implementasi Greedy pada Battlecode}{5}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}Sistem Eksekusi Berbasis Giliran (Turn-Based Execution)}{5}{subsubsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2}Mekanisme Kerja Program dan Implementasi Greedy pada Battlecode}{6}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Sistem Eksekusi Berbasis Giliran (Turn-Based Execution)}{6}{subsubsection.2.2.1}%
 \contentsline {subsubsection}{\numberline {2.2.2}Penerapan Algoritma Greedy pada Bot}{6}{subsubsection.2.2.2}%
 \contentsline {subsubsection}{\numberline {2.2.3}Eksekusi dan Siklus Hidup Bot}{6}{subsubsection.2.2.3}%
+\contentsline {section}{\numberline {3}Implementasi dan Pengujian}{7}{section.3}%

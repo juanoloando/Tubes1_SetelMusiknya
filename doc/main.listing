@@ -1,6 +1,3 @@
-\section{Implementasi dan Pengujian}
-
-\begin{pseudocode}{Juan Greedy}
 
 while game_not_finished do
     sense nearby ruins
@@ -14,4 +11,3 @@ while game_not_finished do
     end if
 end while
 
-\end{pseudocode}

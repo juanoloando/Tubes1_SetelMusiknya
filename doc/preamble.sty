@@ -180,7 +180,7 @@
 % judul
 \usepackage{titling} 
 \pretitle{\centering\LARGE\scshape}
-\posttitle{\vspace{0.5em}\par\vspace{1cm}\includegraphics[width=0.6\textwidth]{images/efrenreinsen.jpeg}\par\vspace{1.5cm}}
+\posttitle{\vspace{0.5em}\par\vspace{1cm}\includegraphics[width=0.6\textwidth]{images/logo.png}\par\vspace{1.5cm}}
 \preauthor{\centering\large\scshape}
 \postauthor{\par}
 \predate{\centering}
@@ -252,4 +252,34 @@
 
 \newcommand{\richref}[2]{%
   \hyperref[#1]{\tcbox[chip-docs-light]{#2}}%
+}
+
+%psuedocode
+
+\definecolor{codegray}{RGB}{245,245,245}
+
+\newtcblisting{pseudocode}[2][]{
+  enhanced,
+  breakable,
+  colback=codegray,
+  colframe=black!30,
+  boxrule=0.5pt,
+  arc=4pt,
+  outer arc=4pt,
+  listing only,
+  title=\textbf{Algoritma: #2},
+  fonttitle=\bfseries,
+  coltitle=black,
+  listing options={
+    basicstyle=\ttfamily\small,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    tabsize=2,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true
+  },
+  #1
 }

@@ -1,0 +1,69 @@
+\section{Aplikasi Strategi Greedy}
+
+\subsection{Pemetaan Persoalan Battlecode ke Elemen Algoritma Greedy}
+Persoalan dominasi wilayah dan manajemen agen otonom dalam Battlecode 2025 merupakan persoalan optimasi dinamis dengan batasan sumber daya komputasi (\textit{bytecode}). Berdasarkan landasan teori optimasi, persoalan ini dapat dipetakan ke dalam lima elemen dasar algoritma \textit{Greedy} sebagai berikut:
+\begin{enumerate}
+    \item \textbf{Himpunan Kandidat (\textit{Candidate Set}):} Kumpulan arah pergerakan yang terdiri dari 8 arah mata angin di sekitar posisi robot saat ini, ditambah dengan serangkaian aksi spasial (menyerang petak, mewarnai pola, atau mentransfer sumber daya) yang berada dalam radius aksi agen tersebut.
+    \item \textbf{Himpunan Solusi (\textit{Solution Set}):} Serangkaian keputusan pergerakan (\textit{movement path}) dan tindakan (\textit{action sequence}) yang valid, yang pada akhirnya mendominasi wilayah peta serta mendirikan infrastruktur menara sekutu.
+    \item \textbf{Fungsi Kelayakan (\textit{Feasible Function}):} Modul validasi yang memastikan kandidat langkah tidak melanggar aturan permainan. Kondisi ini diperiksa melalui \textit{API} permainan, seperti pengecekan rintangan dinding (\texttt{isWall()}), keberadaan unit lain yang menghalangi jalan, serta ketersediaan sumber daya \textit{paint} sebelum mengeksekusi suatu aksi.
+    \item \textbf{Fungsi Objektif (\textit{Objective Function}):} Fungsi yang bertujuan untuk memaksimalkan jumlah petak yang diwarnai oleh cat sekutu, memaksimalkan rasio kerusakan terhadap menara musuh, serta meminimalisir penggunaan \textit{bytecode} pada setiap giliran.
+    \item \textbf{Fungsi Seleksi (\textit{Selection Function}):} Fungsi heuristik berbasis spasial yang mengevaluasi nilai taktis dari setiap kandidat pada Himpunan Kandidat. Fungsi ini akan memilih satu kandidat dengan skor tertinggi (optimum lokal) untuk dimasukkan ke dalam Himpunan Solusi pada giliran tersebut.
+\end{enumerate}
+
+\subsection{Eksplorasi Alternatif Solusi Greedy}
+Guna mencari strategi heuristik terbaik yang memenuhi Fungsi Objektif, dieksplorasi tiga pendekatan alternatif solusi \textit{Greedy} yang memiliki karakteristik penentuan optimum lokal yang berbeda.
+
+\subsubsection{Alternatif 1: Greedy Spasial Dinamis Berbobot (Solusi Bot Utama)}
+Alternatif ini menggunakan arsitektur \textit{Finite State Machine} (FSM) untuk menentukan konteks makro agen, yang kemudian dikombinasikan dengan fungsi seleksi \textit{Greedy} berbasis pembobotan (\textit{weighted scoring}) pada eksekusi mikronya. Berikut adalah elaborasi heuristik \textit{Greedy} pada setiap tipe agen otonom:
+
+\begin{enumerate}[label=\textbf{\Alph*.}, leftmargin=*]
+    \item \textbf{Strategi \textit{Spawn} pada Menara (\textit{TowerUnit})}\\
+    Menara mengimplementasikan \textit{Greedy Resource Management} untuk mengubah kepingan uang (\textit{chips}) menjadi unit militer secara maksimal tanpa melakukan penimbunan yang tidak efisien.
+    \begin{itemize}
+        \item \textbf{\textit{Greedy Initial Expansion}:} Pada 30 ronde pertama, sumber daya secara rakus digunakan untuk mencetak dua agen \textit{Soldier}. Agen pertama dipaksa lahir berorientasi ke Barat, dan agen kedua ke Timur untuk mencegah tumpang-tindih area kerja pada fase awal permainan.
+        \item \textbf{\textit{Dynamic Thresholding}:} Transisi fase permainan memengaruhi ambang batas (\textit{threshold}) pencetakan unit. Pada fase \textit{late-game}, ketika \textit{chips} melebihi 800, menara secara rakus langsung memanggil \textit{Splasher} (unit termahal) tanpa menunggu perintah.
+        \item \textbf{\textit{Threat-Driven Ratio}:} Secara standar, menara menyeimbangkan rasio (\textit{Soldier} 40\%, \textit{Splasher} 45\%, \textit{Mopper} 15\%). Namun, jika radar mendeteksi sinyal keberadaan musuh (\texttt{enemyTowerCount > 0}), menara secara \textit{greedy} menunda antrean \textit{Soldier} dan memprioritaskan pencetakan \textit{Mopper} sebagai unit defensif.
+    \end{itemize}
+
+    \item \textbf{Unit \textit{Soldier}}\\
+    Unit ini mengeksekusi ekspansi wilayah dengan fungsi skoring yang menghitung nilai setiap petak di sekitarnya.
+    \begin{itemize}
+        \item \textbf{\textit{Greedy Initial Paint}:} \textit{Soldier} yang berstatus \texttt{INITIAL\_PAINT} memindai wilayah $5 \times 5$ petak di sekitar menaranya. Mereka membagi wilayah evaluasi secara rakus berdasarkan sumbu $x$ (kiri dan kanan), menimpa semua petak netral hingga perimeter menara sekutu sepenuhnya dikuasai.
+        \item \textbf{\textit{Ruin Proximity Selection}:} Dalam mencari tapak reruntuhan (\textit{Ruin}) untuk mendirikan menara, agen mengevaluasi semua reruntuhan terdekat menggunakan heuristik: 
+        \[\text{Skor} = (\text{Pola Benar} \times 10) - (\text{Jarak} / 5)\] 
+        Agen akan bergerak ke reruntuhan dengan skor optimum lokal tertinggi.
+        \item \textbf{\textit{Paint Routing Heuristic}:} Pergerakan \textit{Soldier} dipandu oleh pembobotan petak. Petak cat musuh diberikan skor dominan (+60), petak netral (+30), sedangkan petak berpelumas cat sekutu diberi penalti (-15) agar unit tidak menetap di wilayah sendiri. Tambahan bobot (+80) diberikan jika arah tersebut memiliki kedekatan dengan reruntuhan.
+    \end{itemize}
+
+    \item \textbf{Unit \textit{Mopper}}\\
+    Sebagai unit pertahanan, fungsi \textit{Greedy} pada \textit{Mopper} diarahkan untuk netralisasi ancaman dan perbaikan struktural.
+    \begin{itemize}
+        \item \textbf{\textit{Greedy Melee Combat}:} Agen menyimulasikan tebasan sabit (\texttt{mopSwing}) ke 8 arah mata angin. Arah yang mengenai jumlah unit musuh terbanyak secara matematis dipilih sebagai solusi lokal.
+        \item \textbf{\textit{Defensive Clean Targeting}:} Agen memilih petak cat musuh yang akan dibersihkan dengan skoring yang berfokus pada pertahanan markas: 
+        \[\text{Skor} = (100 - \text{Jarak Menara Sekutu}) + (\text{Kepadatan Cat Musuh} \times 5)\] 
+        Hal ini mengamankan infrastruktur vital dari sabotase area musuh.
+        \item \textbf{\textit{Greedy Support}:} Jika agen mendeteksi sekutu dengan sisa persediaan cat kritis ($<$ 20\%), \textit{Mopper} akan langsung memotong antrean aksinya untuk mendonasikan cat (\textit{transfer paint}), memastikan sekutu di garis depan tidak mati akibat penalti degradasi energi.
+    \end{itemize}
+
+    \item \textbf{Unit \textit{Splasher}}\\
+    Pengambilan keputusan \textit{Greedy} pada unit ini berfokus pada kerusakan massal dan identifikasi kepadatan musuh.
+    \begin{itemize}
+        \item \textbf{\textit{Splash Area Scoring}:} Setiap proyektil tembakan dievaluasi dampaknya. Percikan ke petak musuh bernilai +3 dan petak kosong bernilai +1. Tembakan hanya akan dilepaskan pada titik pusat yang akumulasi skor percikannya tertinggi.
+        \item \textbf{\textit{Quadrant Density Search}:} Saat kehilangan target visual, \textit{Splasher} membelah peta internalnya menjadi 4 kuadran. Agen menghitung rasio cat musuh terhadap petak valid di tiap kuadran, kemudian menetapkan jalur sepanjang 8 langkah menuju kuadran dengan kepadatan musuh (\textit{density}) tertinggi.
+    \end{itemize}
+
+    \item \textbf{Mekanisme Pendukung Eksekusi \textit{Greedy}}\\
+    Algoritma \textit{Greedy} memiliki kelemahan bawaan pada jebakan spasial minimum lokal, sehingga agen dilengkapi dengan fungsi pendukung berikut:
+    \begin{itemize}
+        \item \textbf{\textit{Anti-Stuck Memory} (\textit{Trail Penalty}):} Kelemahan mendasar dari algoritma \textit{Greedy} adalah risiko terjebak pada geometri ruang konkaf (misal: tembok berbentuk "U"). Hal ini dimitigasi dengan menggunakan struktur \textit{array} sirkular $O(1)$ berukuran 50 yang merekam rekam jejak koordinat. Jika fungsi \textit{Greedy} mengevaluasi petak yang telah dilewati, petak tersebut menerima penalti ekstrem (-800), secara paksa merusak optimum lokal lama dan memaksa agen menemukan rute baru.
+        \item \textbf{\textit{Anti-Clustering Repulsion}:} Jika agen mengevaluasi bahwa ia berada pada tingkat kepadatan sekutu yang membahayakan (memicu \textit{Clustering Penalty} dari aturan sistem), agen secara rakus menghentikan tugasnya dan mundur sejauh 1-2 langkah menjauhi \textit{Center of Mass} kerumunan.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Alternatif 2: [Juan]}
+
+\subsubsection{Alternatif 3: [Edo]}
+
+\subsection{Analisis Efisiensi dan Efektivitas Alternatif Solusi}
+
+\subsection{Strategi Greedy yang Dipilih beserta Pertimbangan}

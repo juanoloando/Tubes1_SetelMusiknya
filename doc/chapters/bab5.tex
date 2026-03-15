@@ -1,0 +1,17 @@
+\section{Kesimpulan}
+
+Berdasarkan perancangan, implementasi, dan pengujian yang telah dilakukan pada Tugas Besar 1 mata kuliah IF2211 Strategi Algoritma, dapat ditarik beberapa kesimpulan utama terkait penerapan algoritma \textit{greedy} pada permainan Battlecode 2025:
+
+\begin{enumerate}
+    \item \textbf{Kesesuaian Algoritma \textit{Greedy} dengan Persoalan:}
+    Algoritma \textit{greedy} terbukti sangat cocok dan efektif untuk diimplementasikan dalam lingkungan Battlecode. Batasan sumber daya komputasi (\textit{bytecode limit}) yang sangat ketat dan kondisi peta yang sangat dinamis membuat algoritma pencarian jalur global (seperti A-Star) menjadi tidak efisien. Pengambilan keputusan \textit{greedy} yang mengevaluasi \textit{local optimum} pada setiap ronde terbukti memberikan waktu respons yang cepat, ringan secara komputasi, dan cukup adaptif terhadap perubahan formasi musuh.
+
+    \item \textbf{Superioritas Strategi Ekspansi Agresif (\texttt{mainbot}):}
+    Dari ketiga alternatif strategi yang dikembangkan, \textbf{Alternatif 1 (\texttt{mainbot})} keluar sebagai strategi paling sukses dan tangguh di berbagai kondisi peta. Keberhasilan \texttt{mainbot} memvalidasi bahwa untuk mencapai \textit{win condition} penguasaan 70\% area, memaksimalkan kuantitas penyebaran cat (\textit{paint coverage}) dengan cepat jauh lebih krusial daripada menjaga keberlangsungan hidup robot (manajemen mikro). Mengabaikan mekanisme pengisian ulang (\textit{refill}) demi ekspansi agresif ternyata menghasilkan \textit{global optimum} dalam kompetisi ini.
+
+    \item \textbf{Kelemahan Bawaan dan Mitigasi \textit{Local Optima}:}
+    Kelemahan utama dari strategi \textit{greedy} murni adalah kerentanannya terjebak dalam \textit{local optima}, seperti terjebak di jalan buntu pada peta yang rumit atau mati karena kehabisan sumber daya. Implementasi modifikasi heuristik—seperti penalti riwayat pergerakan (\textit{Anti-Trailing} / \textit{Tabu List}), fitur \textit{Anti-Clumping} untuk mencegah penumpukan unit, dan pembagian peran berbasis operasi \textit{modulo}—terbukti sangat krusial untuk memitigasi kelemahan tersebut tanpa harus mengorbankan banyak \textit{bytecode}.
+
+    \item \textbf{Pentingnya Pembobotan Fungsi Objektif yang Dinamis:}
+    Kekalahan beberapa alternatif bot pada ukuran peta tertentu (seperti kekalahan \texttt{altbot1} di peta kecil dan kekalahan \texttt{altbot2} di peta besar) menunjukkan bahwa fungsi objektif statis tidak bisa menjawab semua tantangan. Agar algoritma \textit{greedy} dapat terus menghasilkan langkah yang selaras dengan \textit{global optimum}, bobot heuristik harus dibuat dinamis—beradaptasi secara proaktif terhadap ukuran peta, fase permainan (\textit{early} vs \textit{late game}), serta sisa sumber daya (\textit{paint} dan \textit{chips}) yang dimiliki oleh tim.
+\end{enumerate}

@@ -1130,16 +1130,6 @@ INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT ./images/stei.png
 INPUT ./images/stei.png
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
-INPUT ./images/itb.png
-INPUT ./images/itb.png
-INPUT ./images/itb.png
-INPUT ./images/itb.png
-INPUT ./images/stei.png
-INPUT ./images/stei.png
-INPUT ./images/stei.png
-INPUT ./images/stei.png
 INPUT ./chapters/bab4.tex
 INPUT ./chapters/bab4.tex
 INPUT ./chapters/bab4.tex

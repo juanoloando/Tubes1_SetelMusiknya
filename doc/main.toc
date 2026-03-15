@@ -28,9 +28,12 @@
 \contentsline {subsubsection}{\numberline {3.1.4}Fungsi Kelayakan}{6}{subsubsection.3.1.4}%
 \contentsline {subsubsection}{\numberline {3.1.5}Fungsi Solusi}{6}{subsubsection.3.1.5}%
 \contentsline {subsubsection}{\numberline {3.1.6}Fungsi Objektif}{7}{subsubsection.3.1.6}%
-\contentsline {subsection}{\numberline {3.2}Eksplorasi Tiga Alternatif Solusi \textit {Greedy}}{7}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Alternatif 1 --- \textit {Greedy} Ekspansi Teritorial Berbasis Nilai Tile Lokal}{7}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Alternatif 2 --- \textit {(Dikembangkan oleh anggota kelompok lain)}}{8}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}Alternatif 3 --- \textit {(Dikembangkan oleh anggota kelompok lain)}}{9}{subsubsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.3}Analisis Efisiensi dan Efektivitas}{9}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Strategi \textit {Greedy} yang Dipilih}{9}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.2}Eksplorasi Alternatif Solusi \textit {Greedy}: Strategi \textit {Nexus Expansion}}{7}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Alternatif 1: Eksplorasi Agresif Tanpa Refill}{7}{subsubsection.3.2.1}%
+\contentsline {paragraph}{\relax Heuristik Umum: \textit {Greedy Exploration} dan \textit {Anti-Trailing}}{7}{section*.2}%
+\contentsline {paragraph}{\relax Fungsi Seleksi Spesifik Unit \textit {Soldier}}{7}{equation.3.2}%
+\contentsline {paragraph}{\relax Fungsi Seleksi Spesifik Unit \textit {Mopper}}{7}{Item.14}%
+\contentsline {paragraph}{\relax Fungsi Seleksi Spesifik Unit \textit {Splasher}}{7}{equation.3.4}%
+\contentsline {paragraph}{\relax Fungsi Seleksi Strategis \textit {Tower}}{8}{equation.3.5}%
+\contentsline {subsection}{\numberline {3.3}Analisis Efisiensi dan Efektivitas}{8}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Strategi \textit {Greedy} yang Dipilih}{8}{subsection.3.4}%

@@ -1,5 +1,5 @@
 # Fdb version 4
-["bibtex main"] 0 "main.aux" "main.bbl" "main" 1773567355.683 0
+["bibtex main"] 0 "main.aux" "main.bbl" "main" 1773576389.25827 0
   "/usr/share/texlive/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
   "bibliography.bib" 0 -1 0 ""
   "main.aux" 0 -1 0 "pdflatex"
@@ -7,7 +7,7 @@
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1773567348.66807 "/mnt/c/Users/HP/Documents/Tubes1_SetelMusiknya/doc/main.tex" "main.pdf" "main" 1773567355.68412 0
+["pdflatex"] 1773576382.76743 "/mnt/c/Users/HP/Documents/Tubes1_SetelMusiknya/doc/main.tex" "main.pdf" "main" 1773576389.25939 0
   "/etc/texmf/web2c/texmf.cnf" 1773508087.80453 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/mnt/c/Users/HP/Documents/Tubes1_SetelMusiknya/doc/main.tex" 1773534090.34433 440 047781f16fad70fa7960f467c7ee7cc3 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -21,8 +21,6 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1246382020 940 228d6584342e91276bf566bcf9716b83 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm" 1136768653 1332 f817c21a1ba54560425663374f1b651a ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm" 1136768653 1336 3125ccb448c1a09074e3aa4a9832f130 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm" 1136768653 1332 1fde11373e221473104d6cc5993f046e ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm" 1136768653 1532 9162035f4e7176612125649e348e2195 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm" 1136768653 1300 63a6111ee6274895728663cf4b4e7e81 ""
@@ -550,22 +548,22 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1773539044.19838 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1773539258 8215391 ea0858fc9ff5b5b37c50c51e8ac5ce11 ""
-  "chapters/bab1.tex" 1773534090.31594 6889 f24bc56256c5ccf49ad6e5ce6a05ff5c ""
-  "chapters/bab2.tex" 1773542162.0155 7213 1ac636bd0c1d95062bcf8fdc735a7573 ""
-  "chapters/bab3.tex" 1773567339.15261 12920 3222ecefac9d47b4c6d51b3a44c252fb ""
+  "chapters/bab1.tex" 1773575480.87354 6889 f24bc56256c5ccf49ad6e5ce6a05ff5c ""
+  "chapters/bab2.tex" 1773575478.80457 7213 1ac636bd0c1d95062bcf8fdc735a7573 ""
+  "chapters/bab3.tex" 1773576373.44157 7862 dad3dfabbfdb2cc0ffb17e74aebaf436 ""
   "chapters/bab4.tex" 1773534090.31957 0 d41d8cd98f00b204e9800998ecf8427e ""
   "chapters/bab5.tex" 1773534090.3204 0 d41d8cd98f00b204e9800998ecf8427e ""
   "images/efrenreinsen.jpeg" 1773534090.32328 99636 24dff3fec3ba2c275ad0bf28d4838d13 ""
   "images/itb.png" 1773534090.32493 20574 6baff10998212c96e72a8bb8dfce690a ""
   "images/stei.png" 1773534090.32657 66600 bb9db9f74bcbcfc8fa4173525f31383b ""
-  "main.aux" 1773567354.32539 7741 2870255ad35dc731ffdc0e2dc81220a3 "pdflatex"
+  "main.aux" 1773576388.07761 6709 3953ff9c60783259e388013ca4cb5c23 "pdflatex"
   "main.bbl" 0 -1 0 "bibtex main"
-  "main.mtc" 1773567352.76291 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.mtc0" 1773567352.76391 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.out" 1773567354.32929 8185 6ac4bae51e0e88f6f38570a09798329e "pdflatex"
+  "main.mtc" 1773576386.42811 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.mtc0" 1773576386.42811 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.out" 1773576388.07761 8682 20245708e24ea1838520a5d2574419e3 "pdflatex"
   "main.tex" 1773534090.34433 440 047781f16fad70fa7960f467c7ee7cc3 ""
-  "main.toc" 1773567354.33036 3586 4834facffb87c51296c2ce6850c5dae3 "pdflatex"
-  "preamble.sty" 1773534090.34688 7861 f0530ec7ebc17b998cf3e573c53badc1 ""
+  "main.toc" 1773576388.07761 3803 78996adec90a2162edcd38495efebb07 "pdflatex"
+  "preamble.sty" 1773576177.68984 7861 6ba1a0634be54ceba37eb3ed87ec13a8 ""
   (generated)
   "main.aux"
   "main.log"

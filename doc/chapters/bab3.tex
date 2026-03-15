@@ -69,231 +69,52 @@ selalu memilih aksi yang memberikan peningkatan terbesar terhadap cakupan
 wilayah tim pada ronde yang sedang berjalan.
 
 % ─────────────────────────────────────────────────────────────────────────────
-\subsection{Eksplorasi Tiga Alternatif Solusi \textit{Greedy}}
+\subsection{Eksplorasi Alternatif Solusi \textit{Greedy}: Strategi \textit{Nexus Expansion}}
 
-Tiga alternatif strategi \textit{greedy} dikembangkan dengan heuristik
-yang berbeda satu sama lain.  Perbedaan ini diwujudkan terutama pada
-fungsi seleksi, yang merupakan elemen paling krusial dalam menentukan
-perilaku algoritma \textit{greedy} \cite{levitin2003}.  Setiap
-subbagian berikut terlebih dahulu menguraikan tujuan dan heuristik umum
-setiap alternatif, kemudian mendeskripsikan pemetaan elemen-elemen
-\textit{greedy} secara detail untuk alternatif tersebut.
+\subsubsection{Alternatif 1: Eksplorasi Agresif Tanpa Refill}
 
-% ·············································································
-\subsubsection{Alternatif 1 --- \textit{Greedy} Ekspansi Teritorial
-               Berbasis Nilai Tile Lokal}
-\label{ssec:alt1}
+% Menggunakan \paragraph sebagai pengganti \subsubsubsection agar tidak error
+\paragraph{Heuristik Umum: \textit{Greedy Exploration} dan \textit{Anti-Trailing}}
+Secara umum, seluruh unit menggunakan fungsi seleksi pergerakan yang meminimalkan fungsi biaya total $J$ untuk setiap arah $d \in D$:
+\begin{equation}
+    J(d) = \text{dist}^2(\text{loc} + d, \text{target}) + \text{penalty}_{\text{trail}}(\text{loc} + d)
+\end{equation}
+Di mana $\text{penalty}_{\text{trail}}$ memberikan bobot penalti sebesar 800 poin untuk tile yang sudah pernah dikunjungi (disimpan dalam memori \textit{trail}). Hal ini mencegah robot terjebak dalam siklus gerakan lokal dan memastikan eksplorasi yang tersebar luas.
 
-\noindent\textbf{Tujuan dan Heuristik Umum}
-
-Strategi ini mengadopsi prinsip: setiap robot pada setiap ronde memilih
-aksi yang memberikan nilai heuristik tertinggi berdasarkan kondisi tile
-yang dapat diinderanya saat itu, tanpa memperhitungkan konsekuensi jangka
-panjang.  Nilai tersebut ditentukan oleh jenis cat pada tile tujuan,
-jarak ke reruntuhan terdekat, serta riwayat kunjungan robot untuk
-mencegah osilasi.  Robot beroperasi penuh hingga cat habis; tidak
-terdapat mekanisme pengisian ulang cat (\textit{refill}).  Setelah cat
-habis, robot menjauh dari markas agar tidak menghalangi robot-robot baru.
-
-\noindent\textbf{Himpunan Kandidat}
-
-Himpunan kandidat $C$ pada setiap ronde terdiri atas:
-\begin{itemize}
-    \item delapan arah gerak beserta pilihan diam;
-    \item seluruh tile non-sekutu dalam radius aksi yang dapat diserang
-          atau diwarnai; serta
-    \item reruntuhan dalam radius sensor yang dapat diinisiasi pola
-          towernya.
-\end{itemize}
-
-\noindent\textbf{Himpunan Solusi}
-
-Himpunan solusi $S$ adalah urutan pasangan aksi (gerak, serang/warnai)
-yang dilaksanakan robot sepanjang permainan.  Setiap ronde menyumbangkan
-tepat satu elemen ke dalam $S$.
-
-\noindent\textbf{Fungsi Seleksi}
-
-Fungsi seleksi berbeda untuk setiap tipe robot.
-
-Untuk \textit{robot penyerang} (\textit{Soldier}), aksi dipilih melalui
-sebuah \textit{state machine} berprioritas:
+\paragraph{Fungsi Seleksi Spesifik Unit \textit{Soldier}}
+\textit{Soldier} bertindak sebagai unit pembangun dan pengecat presisi. Fungsi seleksinya dibagi menjadi tiga tahap utama:
 \begin{enumerate}
-    \item Pada fase awal permainan, dua \textit{Soldier} pertama mengecat
-          area sekitar menara awal secara simetris berdasarkan paritas ID
-          robot, sehingga keduanya tidak tumpang-tindih.
-    \item Jika terdapat reruntuhan tanpa tower dalam radius sensor,
-          \textit{Soldier} memprioritaskan penyelesaian pola tower.
-          Reruntuhan dipilih dengan skor:
-          \begin{equation}
-              \text{ruinScore}(r) =
-              \text{correctTiles}(r) \times 10
-              - \frac{d^2_{\text{robot},r}}{5}
-              \label{eq:ruin}
-          \end{equation}
-          di mana $\text{correctTiles}(r)$ adalah jumlah tile di area
-          $5\times5$ sekitar reruntuhan $r$ yang sudah diwarnai sesuai
-          pola, dan $d^2_{\text{robot},r}$ adalah jarak kuadrat robot
-          ke $r$.
-    \item Jika terdapat tile non-sekutu dalam radius aksi, \textit{Soldier}
-          memilih arah gerak dengan skor:
-          \begin{equation}
-              \text{moveScore}(l) = v(l) + b_{\text{ruin}}(l)
-                                         - \text{trailPenalty}(l)
-              \label{eq:soldier}
-          \end{equation}
-          dengan nilai cat:
-          \begin{equation}
-              v(l) =
-              \begin{cases}
-                  +60 & \text{jika tile } l \text{ bercat musuh,} \\
-                  +30 & \text{jika tile } l \text{ belum diwarnai,} \\
-                  -15 & \text{jika tile } l \text{ bercat sekutu;}
-              \end{cases}
-              \label{eq:vtile}
-          \end{equation}
-          bonus reruntuhan $b_{\text{ruin}}(l) = +80$ jika ada reruntuhan
-          dalam radius 8 dari $l$; dan penalti anti-osilasi
-          $\text{trailPenalty}(l) = 800 \times |\{t \in \text{trail}[50]
-          : t = l\}|$.
-    \item Jika tidak ada target pada kondisi di atas, robot menjelajah ke
-          titik kandidat terjauh dari posisi saat ini.  Jika cat mendekati
-          nol, robot menjauh dari markas.
+    \item \textbf{Tahap Awal (\textit{Initial Paint}):} Melakukan pembagian tugas (\textit{role}) berdasarkan paritas ID robot ($ID \pmod 2$). Robot memilih tile di sekitar menara induk yang belum berwarna tim untuk menjamin ketersediaan cat di pangkalan.
+    \item \textbf{Tahap Konstruksi:} Memprioritaskan kandidat reruntuhan (\textit{ruin}) dengan skor:
+    \begin{equation}
+        \text{Score}_{\text{ruin}} = 10 \cdot N_{\text{correct\_pattern}} - \frac{\text{dist}^2}{5}
+    \end{equation}
+    di mana $N_{\text{correct\_pattern}}$ adalah jumlah tile pola yang sudah sesuai.
+    \item \textbf{Tahap Eksplorasi Agresif:} Jika cat habis ($\text{paint} \le 10$), fungsi seleksi akan memilih arah yang memaksimalkan jarak dari menara sekutu terdekat (\textit{move away}) untuk melakukan \textit{scouting}.
 \end{enumerate}
 
-Untuk \textit{robot serangan area} (\textit{Splasher}), terdapat dua
-lapisan seleksi.  Pertama, pemilihan titik serangan berdasarkan:
+\paragraph{Fungsi Seleksi Spesifik Unit \textit{Mopper}}
+\textit{Mopper} berfokus pada pembersihan cat musuh tanpa melakukan isi ulang (\textit{refill}). Fungsi seleksi aksi memilih tile serangan berdasarkan kepadatan cat musuh di sekitar tile target:
 \begin{equation}
-    \text{splashScore}(l) =
-    \sum_{t \,\in\, \text{area}(l,\, r=\sqrt{4})}
-    \bigl(
-        3 \cdot \mathbf{1}_{\text{enemy}}(t)
-      + 1 \cdot \mathbf{1}_{\text{empty}}(t)
-    \bigr)
-    \label{eq:splash}
+    \text{Score}_{\text{clean}} = (100 - \text{dist}_{\text{base}}) + 5 \cdot N_{\text{adjacent\_enemy\_paint}}
 \end{equation}
-dengan ambang minimum $\text{splashScore}(l) \geq 3$.  Kedua, pemilihan
-arah gerak berdasarkan \textit{density} cat non-sekutu per kuadran:
+Untuk pertempuran unit (\textit{combat}), \textit{Mopper} secara \textit{greedy} memilih arah ayunan (\textit{mop swing}) yang menghasilkan hit terbanyak terhadap robot lawan.
+
+\paragraph{Fungsi Seleksi Spesifik Unit \textit{Splasher}}
+\textit{Splasher} menggunakan logika \textit{quadrant density} untuk menentukan arah pergerakan. Fungsi seleksi membagi area pandang menjadi empat kuadran dan menghitung densitas cat target (kosong atau musuh):
 \begin{equation}
-    \text{density}(q) =
-    \frac{\text{quadrantScore}[q]}{\text{quadrantCount}[q]},
-    \quad q \in \{\text{NE, NW, SE, SW}\}
-    \label{eq:density}
+    \text{Density}_q = \frac{\sum \text{Score}_{\text{tile} \in q}}{\text{Count}_{\text{tile} \in q}}
 \end{equation}
-Robot bergerak ke kuadran dengan $\text{density}(q)$ tertinggi, dengan
-syarat $\text{density}(q) > 0{,}3$.  Jika cat habis, robot menjauh dari
-markas.
+Robot akan bergerak menuju kuadran dengan $\text{Density}_q$ tertinggi. Dalam pemilihan target serangan, \textit{Splasher} memilih tile yang memaksimalkan dampak area (\textit{splash damage}) dengan bobot 3 untuk cat musuh dan 1 untuk tile kosong.
 
-Untuk \textit{robot pembersih} (\textit{Mopper}), state dievaluasi
-berurutan: pertarungan jarak dekat $\to$ pembersihan cat $\to$ dukungan
-sekutu $\to$ patroli.  Pada pertarungan jarak dekat, dipilih arah ayunan
-yang memaksimalkan musuh yang terkena:
-\begin{equation}
-    d^* = \arg\max_{d \,\in\, \text{DIRS}}\;
-    \text{swingHits}(d)
-    \label{eq:swing}
-\end{equation}
-Pada pembersihan cat, target dipilih berdasarkan:
-\begin{equation}
-    \text{cleanScore}(l) =
-    \max\!\bigl(0,\; 100 - d^2_{\text{base}}(l)\bigr)
-    + 5 \cdot n_{\text{adj}}(l)
-    \label{eq:mopper}
-\end{equation}
-di mana $d^2_{\text{base}}(l)$ adalah jarak kuadrat ke menara sekutu
-terdekat dan $n_{\text{adj}}(l)$ adalah jumlah tile bercat musuh yang
-bersebelahan dengan $l$.
-
-Untuk \textit{menara} (\textit{Tower}), jenis unit yang di-\textit{spawn}
-dipilih secara bertingkat: pada ronde awal ($<150$) bergantian antara
-penyerang dan serangan area; setelahnya, jenis unit dipilih berdasarkan
-cek rasio berurutan dengan target 15\% pembersih, 40\% penyerang, dan
-45\% serangan area.
-
-\noindent\textbf{Fungsi Kelayakan}
-
-Setiap kandidat aksi diperiksa melalui fungsi-fungsi bawaan
-\textit{game engine} sebelum dieksekusi: apakah tile tujuan dapat
-dicapai, apakah \textit{cooldown} sudah siap, dan apakah tile target
-berada dalam radius aksi yang valid.
-
-\noindent\textbf{Fungsi Solusi}
-
-Kondisi solusi tercapai ketika $f_{\text{obj}} > 70\%$ atau seluruh
-unit musuh hancur, sebagaimana didefinisikan oleh \textit{game engine}.
-
-\noindent\textbf{Fungsi Objektif}
-
-Secara lokal, setiap robot memaksimalkan jumlah tile baru yang berhasil
-diwarnai pada setiap ronde, yang secara kumulatif berkontribusi pada
-$f_{\text{obj}}$ (\ref{eq:obj}).
-
-% ·············································································
-\subsubsection{Alternatif 2 --- \textit{(Dikembangkan oleh anggota
-               kelompok lain)}}
-\label{ssec:alt2}
-
-\noindent\textbf{Tujuan dan Heuristik Umum}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 2.)}
-
-\noindent\textbf{Himpunan Kandidat}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 2.)}
-
-\noindent\textbf{Himpunan Solusi}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 2.)}
-
-\noindent\textbf{Fungsi Seleksi}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 2.)}
-
-\noindent\textbf{Fungsi Kelayakan}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 2.)}
-
-\noindent\textbf{Fungsi Solusi}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 2.)}
-
-\noindent\textbf{Fungsi Objektif}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 2.)}
-
-% ·············································································
-\subsubsection{Alternatif 3 --- \textit{(Dikembangkan oleh anggota
-               kelompok lain)}}
-\label{ssec:alt3}
-
-\noindent\textbf{Tujuan dan Heuristik Umum}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 3.)}
-
-\noindent\textbf{Himpunan Kandidat}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 3.)}
-
-\noindent\textbf{Himpunan Solusi}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 3.)}
-
-\noindent\textbf{Fungsi Seleksi}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 3.)}
-
-\noindent\textbf{Fungsi Kelayakan}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 3.)}
-
-\noindent\textbf{Fungsi Solusi}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 3.)}
-
-\noindent\textbf{Fungsi Objektif}
-
-\textit{(Diisi oleh anggota kelompok yang mengembangkan Alternatif 3.)}
-
+\paragraph{Fungsi Seleksi Strategis \textit{Tower}}
+Menara (\textit{TowerUnit}) mengimplementasikan fungsi seleksi produksi untuk menjaga keseimbangan komposisi pasukan. Keputusan tipe unit yang diproduksi ($T$) didasarkan pada rasio populasi saat ini ($R$):
+\begin{itemize}
+    \item Jika $R_{\text{mopper}} < 15\%$, pilih \textit{Mopper}.
+    \item Jika $R_{\text{soldier}} < 40\%$, pilih \textit{Soldier}.
+    \item Jika $R_{\text{splasher}} < 45\%$, pilih \textit{Splasher}.
+\end{itemize}
+Selain itu, menara melakukan \textit{broadcasting} lokasi secara berkala untuk memfasilitasi koordinasi simetris antar unit, memastikan robot tahu arah mana yang harus dijauhi saat cat mereka habis.
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{Analisis Efisiensi dan Efektivitas}
 

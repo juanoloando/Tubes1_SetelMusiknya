@@ -7,7 +7,7 @@ public class SoldierUnit extends BaseRobot {
     private enum State { BUILD_TOWER, PAINT, EXPLORE, INITIAL_PAINT }
     private State state = State.EXPLORE;
     private MapLocation homeTowerLoc = null;
-    private boolean isRoleA = false; // Mengganti isLeftSide
+    private boolean isRoleA = false; // Menentukan sektor kerja pada fase pembukaan.
 
     public SoldierUnit(RobotController rc) {
         super(rc);
@@ -44,7 +44,7 @@ public class SoldierUnit extends BaseRobot {
     private void decideState() throws GameActionException {
         if (state == State.INITIAL_PAINT) return; 
 
-        // Jika cat habis (0), fokus menjauh/eksplorasi tanpa cat
+        // Saat cat nol, unit beralih ke eksplorasi defensif.
         if (rc.getPaint() <= 0) {
             state = State.EXPLORE;
             return;
@@ -103,7 +103,7 @@ public class SoldierUnit extends BaseRobot {
             for (RobotInfo r : nearby) {
                 if (r.getType().isTowerType()) {
                     homeTowerLoc = r.getLocation();
-                    // PERBAIKAN: Gunakan ID untuk membagi peran, bukan koordinat X
+                    // Pembagian peran awal dibuat stabil berdasarkan ID unit.
                     isRoleA = (rc.getID() % 2 == 0);
                     break;
                 }
@@ -122,15 +122,15 @@ public class SoldierUnit extends BaseRobot {
         for (MapInfo tile : area) {
             MapLocation tLoc = tile.getMapLocation();
             
-            // PERBAIKAN: Pembagian area secara simetris relatif terhadap Tower
+            // Area sekitar tower dibagi menjadi dua sektor yang saling melengkapi.
             boolean isLeftOfTower = tLoc.x < homeTowerLoc.x;
             boolean isSameX = tLoc.x == homeTowerLoc.x;
 
             if (isRoleA) {
-                // Peran A: Mengurus sisi kiri tower + setengah jalur tengah vertikal
+                // Peran A menangani sisi kiri dan separuh jalur tengah bagian atas.
                 if (!isLeftOfTower && !(isSameX && tLoc.y < homeTowerLoc.y)) continue;
             } else {
-                // Peran B: Mengurus sisi kanan tower + setengah jalur tengah sisanya
+                // Peran B menangani sisi kanan dan separuh jalur tengah bagian bawah.
                 if (isLeftOfTower && !(isSameX && tLoc.y >= homeTowerLoc.y)) continue;
             }
 
@@ -218,7 +218,7 @@ public class SoldierUnit extends BaseRobot {
             MapLocation best = findBestPaintTarget();
             if (best != null) rc.attack(best);
         }
-        if (rc.isMovementReady()) greedyMoveForPaint();
+        if (rc.isMovementReady()) moveForPaint();
     }
 
     private MapLocation findBestPaintTarget() throws GameActionException {
@@ -236,7 +236,7 @@ public class SoldierUnit extends BaseRobot {
         return bestEnemy != null ? bestEnemy : bestEmpty;
     }
 
-    private void greedyMoveForPaint() throws GameActionException {
+    private void moveForPaint() throws GameActionException {
         Direction bestDir = null;
         int bestScore = Integer.MIN_VALUE;
         for (Direction dir : DIRS) {
@@ -271,10 +271,10 @@ public class SoldierUnit extends BaseRobot {
         if (paintTarget != null) rc.attack(paintTarget);
     }
     
-    if (rc.getPaint() <= 10) { // Jika cat hampir habis atau habis
-        moveAwayFromHome(); // Menjauh dari base sampai mati
+    if (rc.getPaint() <= 10) { // Jaga jarak dari tower saat cadangan cat kritis.
+        moveAwayFromHome(); // Membuka ruang di area basis dan melanjutkan penyebaran.
     } else {
-        greedyExplore(rc);
+        roamExplore(rc);
     }
 }
 }

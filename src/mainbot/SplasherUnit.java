@@ -113,7 +113,7 @@ public class SplasherUnit extends BaseRobot {
         if (exploreTarget != null) {
             moveTo(exploreTarget);
         } else {
-            greedyExplore(rc);
+            roamExplore(rc);
         }
     }
     

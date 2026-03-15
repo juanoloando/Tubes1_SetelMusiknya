@@ -375,7 +375,60 @@
 
 \subsubsection{Struktur Data Utama}
 
+Dalam implementasi algoritma \textit{greedy}, keterbatasan memori dan batasan komputasi (\textit{bytecode limit}) menuntut penggunaan struktur data yang ringan namun mampu menyimpan konteks lokal yang cukup bagi robot untuk mengambil keputusan optimum. Berikut adalah struktur data utama yang digunakan:
+
+\begin{itemize}
+    \item \textbf{Array Sirkular \textit{trail} (\texttt{MapLocation[]}) dan Indeks \textit{trailIdx}:} 
+    Struktur data array statis berkapasitas 50 elemen ini bertindak sebagai \textit{Tab List} memori jangka pendek. Setiap kali robot berpindah tile, koordinat baru ditambahkan ke dalam \textit{trail}, dan indeks \textit{trailIdx} diperbarui menggunakan operasi modulo (\texttt{(trailIdx + 1) \% trail.length}). Hal ini secara konstan menimpa data terlama tanpa memerlukan pergeseran array (\textit{array shifting}) yang memakan \textit{bytecode}. Data ini dibaca oleh fungsi evaluasi gerak untuk menghindari \textit{infinite loop} pada rute pergerakan optimum lokal.
+
+    \item \textbf{Array \textit{alliedTowers} dan \textit{enemyTowers} (\texttt{MapLocation[]}):} 
+    Struktur memori spasial berskala makro yang menyimpan hingga 30 lokasi menara kawan dan 10 lokasi menara lawan. Data ini diperbarui secara \textit{greedy} setiap ronde melalui observasi sensor (\texttt{senseNearbyRobots}) dan pembacaan pesan siaran (\texttt{readMessages}). Array ini penting sebagai titik referensi proksimal ketika robot harus menghitung metrik jarak tempuh untuk menjauh (eksplorasi buta) atau mendekat (menyerang musuh).
+
+    \item \textbf{Struktur \textit{State} (\texttt{Enum}):} 
+    Setiap tipe unit mengimplementasikan \textit{State} yang dimodelkan melalui \texttt{Enum} (misalnya: \texttt{BUILD\_TOWER, PAINT, EXPLORE} pada Soldier). Penentuan \textit{State} dilakukan secara sekuensial dan \textit{greedy} di awal setiap ronde (metode \texttt{decideState()}). State menentukan \textit{objective function} mana yang harus dimaksimalkan oleh robot pada saat itu, memastikan fokus robot tidak terpecah dalam satu siklus komputasi.
+    
+    \item \textbf{Kandidat Arah Konstan \textit{DIRS} (\texttt{Direction[]}):}
+    Kumpulan delapan arah mata angin yang sudah didefinisikan secara statis. Struktur ini mendefinisikan himpunan kandidat $C$ dalam setiap evaluasi \textit{greedy} yang berhubungan dengan ruang (\textit{movement, splash, swing}), menjamin iterasi pencarian selalu konstan sebesar $O(8)$.
+\end{itemize}
+
 \subsubsection{Prosedur dan Fungsi Pendukung Logika Greedy}
+
+Fungsi dan prosedur dalam bot ini dibagi berdasarkan spesialisasi unit. Masing-masing mengimplementasikan fungsi heuristik independen untuk mengevaluasi elemen dari himpunan kandidat aksi.
+
+\begin{enumerate}
+    \item \textbf{Heuristik Pergerakan dan Eksplorasi (\textit{BaseRobot})}
+    \begin{itemize}
+        \item \textbf{\texttt{calcPaintMoveScore(MapLocation loc)}:} Fungsi ini menghitung utilitas tile untuk didekati oleh unit pengecat. Penilaian \textit{greedy} didasarkan pada warna tile saat ini: cat musuh bernilai $+60$, tile kosong $+30$, dan cat sekutu diberikan penalti $-15$. Jika ditemukan reruntuhan (\textit{ruin}) dalam radius 8 petak, diberikan bobot tambahan absolut $+80$. Skor ini memastikan robot selalu ditarik menuju area bernilai investasi terbesar.
+        \item \textbf{\texttt{getTrailPenalty(MapLocation loc)}:} Fungsi penalti evaluasi pergerakan. Apabila tile kandidat ada dalam riwayat \textit{trail}, fungsi mengembalikan nilai mutlak 800. Nilai yang sangat tinggi ini memaksa agen untuk merelakan jarak Euclidean yang lebih dekat demi membuka ruang eksplorasi baru (\textit{greedy avoidance}).
+        \item \textbf{\texttt{moveAwayFromHome()}:} Prosedur \textit{suicidal exploration}. Fungsi ini dipanggil saat \textit{paint} habis. Dari delapan arah yang valid, fungsi secara \textit{greedy} memilih satu arah yang menghasilkan nilai \texttt{distanceSquared} maksimum terhadap menara sekutu terdekat (\textit{home}), memperluas bukaan \textit{fog of war}.
+    \end{itemize}
+
+    \item \textbf{Heuristik Konstruksi dan Pembagian Area (\textit{SoldierUnit})}
+    \begin{itemize}
+        \item \textbf{\texttt{findBestRuin()}:} Fungsi untuk memilih kandidat reruntuhan menara. Pemilihan tidak hanya bergantung pada kedekatan, tetapi memaksimalkan fungsi utilitas:
+        \begin{equation}
+            U_{\text{ruin}} = (10 \times N_{\text{correct\_pattern}}) - \left(\frac{dist^2}{5}\right)
+        \end{equation}
+        Heuristik ini memastikan bahwa reruntuhan yang pola catnya sudah terisi sebagian akan diprioritaskan untuk dihemat waktunya, meskipun jaraknya sedikit lebih jauh.
+        \item \textbf{\texttt{doInitialPaint(MapLocation homeTowerLoc)}:} Prosedur deterministik untuk fase awal ronde. Area di sekitar menara dibagi menjadi himpunan kanan dan kiri. Keputusan \textit{greedy} diambil berdasarkan operasi \texttt{ID mod 2}, sehingga dua unit \textit{Soldier} yang baru diproduksi secara instan mengecat paruh area yang berlawanan tanpa memerlukan komunikasi pertukaran pesan, mencapai optimalitas waktu $O(1)$.
+    \end{itemize}
+
+    \item \textbf{Heuristik Pembersihan (\textit{MopperUnit})}
+    \begin{itemize}
+        \item \textbf{\texttt{findBestCleanTarget()}:} Memilih titik pembersihan cat musuh. Penilaian mempertimbangkan dua parameter heuristik utama: Jarak terhadap basis ($100 - dist_{\text{base}}$) agar \textit{Mopper} bertindak secara defensif mengamankan perimeter menara kawan, ditambah penalti kluster ($5 \times N_{\text{adjacent\_enemy\_paint}}$) untuk menghancurkan formasi kepadatan cat musuh paling rentan secara lokal.
+        \item \textbf{\texttt{countMopSwingHits(Direction dir)}:} Evaluasi aksi pertempuran. Fungsi ini menghitung himpunan irisan antara radius ayunan sapu (tiga tile berdekatan) dengan himpunan robot musuh. Arah \texttt{dir} yang menghasilkan nilai \textit{hits} lokal tertinggi akan langsung dieksekusi.
+    \end{itemize}
+
+    \item \textbf{Heuristik Distribusi Area (\textit{SplasherUnit})}
+    \begin{itemize}
+        \item \textbf{\texttt{findDensityTarget()}:} Implementasi pendekatan makro \textit{greedy}. Area pandangan diproyeksikan ke dalam bidang Kartesius dengan pusat lokalisasi robot saat ini, dibagi menjadi 4 kuadran. Setiap tile musuh menyumbang bobot 3 dan tile kosong bobot 1. \textit{Splasher} menghitung densitas rata-rata tiap kuadran dan mendiktekan arah geraknya secara mutlak menuju kuadran dengan metrik densitas cat bermusuhan paling padat.
+    \end{itemize}
+
+    \item \textbf{Heuristik Keseimbangan Produksi (\textit{TowerUnit})}
+    \begin{itemize}
+        \item \textbf{\texttt{decideSpawnType()}:} Mengatur suplai pasukan melalui perbandingan metrik rasio ideal. Alih-alih merencanakan formasi di awal, menara mengambil keputusan instan berdasarkan kalkulasi kelangkaan sesaat (\textit{immediate scarcity}). Rasio yang dievaluasi adalah \textit{Mopper} ($<15\%$), \textit{Soldier} ($<40\%$), dan \textit{Splasher} ($<45\%$). Apabila populasi kurang dari standar lokal tersebut, unit tersebut langsung diproduksi.
+    \end{itemize}
+\end{enumerate}
 
 \subsection{Pengujian \textit{Greedy}}
 

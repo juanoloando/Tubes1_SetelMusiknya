@@ -8,7 +8,7 @@ Tujuan utama dari permainan ini adalah mewarnai 70% dari total area peta yang da
 
 Di dalam repositori ini, terdapat **tiga alternatif bot** yang masing-masing mengimplementasikan pendekatan heuristik *Greedy* yang berbeda:
 
-1. **`mainbot` (Eksplorasi Agresif Tanpa Refill)** 🏆 *[Bot Terpilih]*
+1. **`mainbot` (Eksplorasi Agresif Tanpa Refill)** *[Bot Terpilih]*
 * Menerapkan strategi *blitzkrieg*. Robot difokuskan murni untuk ekspansi wilayah (pengecatan) dengan cepat.
 * **Heuristik:** Mengabaikan mekanisme *refill* (isi ulang cat) demi pergerakan maju yang konstan. Robot yang kehabisan cat akan otomatis menjadi agen *scout* bunuh diri (menjauh dari markas) untuk memperluas *fog of war*.
 
@@ -142,6 +142,3 @@ Program Studi: Teknik Informatika - Institut Teknologi Bandung
 **Tugas Besar 1 - IF2211 Strategi Algoritma** *Semester Genap Tahun 2025/2026*
 
 ---
-
-**Catatan:**
-Kamu bisa langsung meletakkan teks ini ke file `README.md` di direktori utama repositori Battlecode milikmu. Kalau struktur folder yang sebenarnya beda (misalnya nama bot ke-3 itu `altbot2` tapi di foldernya `juans`), *readme* ini sudah mengakomodasi nama foldernya.

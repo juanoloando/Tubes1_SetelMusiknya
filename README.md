@@ -141,4 +141,6 @@ Program Studi: Teknik Informatika - Institut Teknologi Bandung
 
 **Tugas Besar 1 - IF2211 Strategi Algoritma** *Semester Genap Tahun 2025/2026*
 
+## Catatan Penting terkait Laporan
+Saat pengumpulan tugas kemarin, .pdf lupa dihapus dari gitignore, sehingga laporan tidak nampak pada repository. Commit barusan dimaksudkan untuk memperbaiki hal tersebut. Tidak ada logika kode yang kami ubah.
 ---
